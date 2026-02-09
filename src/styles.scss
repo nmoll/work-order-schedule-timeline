@@ -1,1 +1,33 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  font-family: 'Circular-Std';
+}
+
+/** Preflight **/
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+/** Typography **/
+h1 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: rgba(3, 9, 41, 1);
+}
