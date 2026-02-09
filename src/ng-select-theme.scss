@@ -1,0 +1,21 @@
+.ng-dropdown-panel {
+  box-shadow:
+    0 0 0 1px rgba(104, 113, 150, 0.1),
+    0 2.5px 3px -1.5px rgba(200, 207, 233, 1),
+    0 4.5px 5px -1px rgba(216, 220, 235, 1);
+  background-color: white;
+  border-radius: 5px;
+  padding: 12px 0;
+  top: 30px;
+}
+
+.ng-dropdown-panel .ng-option {
+  padding: 5px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(47, 48, 89, 1);
+}
+
+.ng-dropdown-panel .ng-option.ng-option-selected {
+  color: var(--text-color-primary);
+}

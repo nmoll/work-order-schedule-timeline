@@ -1,4 +1,6 @@
 import { Component, computed, inject, Signal, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgLabelTemplateDirective, NgSelectModule } from '@ng-select/ng-select';
 import { WorkOrderStore } from '../../work-order/work-order.store';
 import { WorkCenterStore } from '../../work-center/work-center.store';
 import {
@@ -34,7 +36,7 @@ interface TimelineViewModel {
   selector: 'app-timeline',
   templateUrl: 'timeline.component.html',
   styleUrl: 'timeline.component.scss',
-  imports: [NgClass],
+  imports: [NgClass, NgSelectModule, FormsModule, NgLabelTemplateDirective],
 })
 export class TimelineComponent {
   workCenterStore = inject(WorkCenterStore);
@@ -42,7 +44,13 @@ export class TimelineComponent {
 
   columnWidth = 113;
 
-  zoomLevel = signal<'day' | 'week' | 'month'>('week');
+  timescaleOptions = [
+    { value: 'day', label: 'Day' },
+    { value: 'week', label: 'Week' },
+    { value: 'month', label: 'Month' },
+  ];
+
+  zoomLevel = signal<'day' | 'week' | 'month'>('month');
 
   timelineColumns: Signal<TimelineColumn[]> = computed(() => {
     const today = new Date();
