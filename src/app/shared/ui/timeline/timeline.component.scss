@@ -24,8 +24,8 @@
 }
 
 .timeline_right-panel-scroller {
-  overflow-x: auto;
   width: max-content;
+  height: 100%;
 }
 
 .timeline_header {
@@ -51,15 +51,93 @@
 }
 
 .timeline_month-column-header {
-  width: 113px;
   text-align: center;
 }
 
 .timeline_row {
   height: var(--timeline-row-height);
+  display: flex;
 }
 
 .timeline_row:hover {
   background-color: rgba(238, 240, 255, 1);
   cursor: pointer;
+}
+
+.timeline_row-column {
+  border-left: 1px solid var(--timeline-border-color);
+  height: 100%;
+  position: relative;
+}
+
+.timeline_work-order {
+  position: absolute;
+  width: 300px;
+  padding-left: 8px;
+  padding-right: 36px;
+  border: 1px solid;
+  border-radius: 8px;
+  z-index: 10;
+  top: 5px;
+  bottom: 5px;
+  border: 1px solid #dee0ff;
+  color: rgba(3, 9, 41, 1);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+}
+
+.timeline_work-order-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+
+.timeline_work-order.open {
+  box-shadow: 0 0 0 1px rgb(249 249 249);
+  background-color: white;
+}
+
+.timeline_work-order.in-progress {
+  box-shadow: 0 0 0 1px rgba(222, 224, 255, 1);
+  background-color: rgba(237, 238, 255, 1);
+}
+
+.timeline_work-order.complete {
+  box-shadow: 0 0 0 1px rgba(209, 250, 179, 1);
+  background-color: rgba(248, 255, 243, 1);
+}
+
+.timeline_work-order.blocked {
+  box-shadow: 0 0 0 1px rgba(255, 245, 207, 1);
+  background-color: rgba(255, 252, 241, 1);
+}
+
+.timeline_work-order-status {
+  font-size: 14px;
+  font-weight: 400;
+  margin-right: 36px;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+.timeline_work-order.open .timeline_work-order-status {
+  background-color: oklch(95.1% 0.026 236.824);
+}
+
+.timeline_work-order.in-progress .timeline_work-order-status {
+  color: rgba(62, 64, 219, 1);
+  background-color: rgba(214, 216, 255, 1);
+}
+
+.timeline_work-order.complete .timeline_work-order-status {
+  color: rgba(8, 162, 104, 1);
+  background-color: rgba(225, 255, 204, 1);
+}
+
+.timeline_work-order.blocked .timeline_work-order-status {
+  color: rgba(177, 54, 0, 1);
+  background-color: rgba(252, 238, 181, 1);
 }

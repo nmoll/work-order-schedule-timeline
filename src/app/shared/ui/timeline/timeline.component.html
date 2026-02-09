@@ -1,30 +1,43 @@
 <div class="timeline">
   <div class="timeline_left-panel">
     <div class="timeline_header">Work Center</div>
-    <div class="timeline_left-panel-item">Genesis Hardware</div>
-    <div class="timeline_left-panel-item">Rodriques Electrics</div>
-    <div class="timeline_left-panel-item">Konsulting Inc</div>
-    <div class="timeline_left-panel-item">McMarrow Distribution</div>
-    <div class="timeline_left-panel-item">Spartan Manufacturing</div>
+    @for (workCenter of workCenterStore.workCenters(); track workCenter.docId) {
+      <div class="timeline_left-panel-item">{{ workCenter.data.name }}</div>
+    }
   </div>
   <div class="timeline_right-panel">
     <div class="timeline_right-panel-scroller">
       <div class="timeline_header">
-        <div class="timeline_month-column-header">Aug 2024</div>
-        <div class="timeline_month-column-header">Sep 2024</div>
-        <div class="timeline_month-column-header">Oct 2024</div>
-        <div class="timeline_month-column-header">Nov 2024</div>
-        <div class="timeline_month-column-header">Dec 2024</div>
-        <div class="timeline_month-column-header">Jan 2025</div>
-        <div class="timeline_month-column-header">Feb 2025</div>
-        <div class="timeline_month-column-header">Mar 2025</div>
+        @for (column of timelineColumns(); track column.label) {
+          <div class="timeline_month-column-header" [style.width]="columnWidth + 'px'">
+            {{ column.label }}
+          </div>
+        }
       </div>
 
-      <div class="timeline_row"></div>
-      <div class="timeline_row"></div>
-      <div class="timeline_row"></div>
-      <div class="timeline_row"></div>
-      <div class="timeline_row"></div>
+      @for (row of viewModel().rows; track row.workCenter.docId) {
+        <div class="timeline_row">
+          @for (column of row.columns; track column.column.label) {
+            <div class="timeline_row-column" [style.width]="columnWidth + 'px'">
+              @for (workOrder of column.workOrders; track workOrder.workOrder.docId) {
+                <div
+                  class="timeline_work-order"
+                  [ngClass]="workOrder.workOrder.data.status"
+                  [style.left]="workOrder.position.left + 'px'"
+                  [style.width]="workOrder.position.width + 'px'"
+                >
+                  <span class="timeline_work-order-name">
+                    {{ workOrder.workOrder.data.name }}
+                  </span>
+                  <span class="timeline_work-order-status">
+                    {{ statusText[workOrder.workOrder.data.status] }}
+                  </span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
     </div>
   </div>
 </div>
