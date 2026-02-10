@@ -8,6 +8,7 @@ export interface TimelineColumn {
   label: string;
   start: Date;
   end: Date;
+  isCurrent: boolean;
 }
 
 export interface TimelineRange {
@@ -44,7 +45,7 @@ export function getMonthRange(today: Date): TimelineRange {
   return { start, count: 13 };
 }
 
-export function generateDayColumns(start: Date, count: number): TimelineColumn[] {
+export function generateDayColumns(start: Date, count: number, today: Date): TimelineColumn[] {
   const columns: TimelineColumn[] = [];
 
   for (let i = 0; i < count; i++) {
@@ -56,17 +57,23 @@ export function generateDayColumns(start: Date, count: number): TimelineColumn[]
     colEnd.setDate(colEnd.getDate() + 1);
     colEnd.setTime(colEnd.getTime() - 1);
 
+    const isCurrent =
+      colStart.getFullYear() === today.getFullYear() &&
+      colStart.getMonth() === today.getMonth() &&
+      colStart.getDate() === today.getDate();
+
     columns.push({
       colNumber: i + 1,
       label: colStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
       start: colStart,
       end: colEnd,
+      isCurrent,
     });
   }
   return columns;
 }
 
-export function generateWeekColumns(start: Date, count: number): TimelineColumn[] {
+export function generateWeekColumns(start: Date, count: number, today: Date): TimelineColumn[] {
   const columns: TimelineColumn[] = [];
 
   for (let i = 0; i < count; i++) {
@@ -87,17 +94,21 @@ export function generateWeekColumns(start: Date, count: number): TimelineColumn[
         ? `${labelEnd.getDate()}`
         : labelEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
+    const todayTime = today.getTime();
+    const isCurrent = todayTime >= weekStart.getTime() && todayTime <= weekEnd.getTime();
+
     columns.push({
       colNumber: i + 1,
       label: `${startLabel}-${endLabel}`,
       start: weekStart,
       end: weekEnd,
+      isCurrent,
     });
   }
   return columns;
 }
 
-export function generateMonthColumns(start: Date, count: number): TimelineColumn[] {
+export function generateMonthColumns(start: Date, count: number, today: Date): TimelineColumn[] {
   const columns: TimelineColumn[] = [];
 
   for (let i = 0; i < count; i++) {
@@ -106,11 +117,16 @@ export function generateMonthColumns(start: Date, count: number): TimelineColumn
     const colEnd = new Date(start.getFullYear(), start.getMonth() + i + 1, 1);
     colEnd.setTime(colEnd.getTime() - 1);
 
+    const isCurrent =
+      colStart.getFullYear() === today.getFullYear() &&
+      colStart.getMonth() === today.getMonth();
+
     columns.push({
       colNumber: i + 1,
       label: colStart.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
       start: colStart,
       end: colEnd,
+      isCurrent,
     });
   }
   return columns;

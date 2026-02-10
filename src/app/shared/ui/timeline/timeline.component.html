@@ -44,33 +44,49 @@
         @for (column of timelineColumns(); track column.label) {
           <div class="timeline_month-column-header" [style.width]="columnWidth + 'px'">
             {{ column.label }}
+
+            @if (column.isCurrent) {
+              <span class="timeline_current-column-label">Current {{ zoomLevel() }}</span>
+            }
           </div>
         }
       </div>
 
-      @for (row of viewModel().rows; track row.workCenter.docId) {
-        <div class="timeline_row">
-          @for (column of row.columns; track column.column.label) {
-            <div class="timeline_row-column" [style.width]="columnWidth + 'px'">
-              @for (workOrder of column.workOrders; track workOrder.workOrder.docId) {
-                <div
-                  class="timeline_work-order"
-                  [ngClass]="workOrder.workOrder.data.status"
-                  [style.left]="workOrder.position.left + 'px'"
-                  [style.width]="workOrder.position.width + 'px'"
-                >
-                  <span class="timeline_work-order-name">
-                    {{ workOrder.workOrder.data.name }}
-                  </span>
-                  <span class="timeline_work-order-status">
-                    {{ statusText[workOrder.workOrder.data.status] }}
-                  </span>
-                </div>
-              }
-            </div>
+      <div class="timeline_body">
+        @for (row of viewModel().rows; track row.workCenter.docId) {
+          <div class="timeline_row">
+            @for (column of row.columns; track column.column.label) {
+              <div class="timeline_row-column" [style.width]="columnWidth + 'px'">
+                @for (workOrder of column.workOrders; track workOrder.workOrder.docId) {
+                  <div
+                    class="timeline_work-order"
+                    [ngClass]="workOrder.workOrder.data.status"
+                    [style.left]="workOrder.position.left + 'px'"
+                    [style.width]="workOrder.position.width + 'px'"
+                  >
+                    <span class="timeline_work-order-name">
+                      {{ workOrder.workOrder.data.name }}
+                    </span>
+                    <span class="timeline_work-order-status">
+                      {{ statusText[workOrder.workOrder.data.status] }}
+                    </span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <div class="timeline_columns">
+          @for (column of timelineColumns(); track column.colNumber) {
+            <div
+              class="timeline_column"
+              [class.current]="column.isCurrent"
+              [style.width]="columnWidth + 'px'"
+            ></div>
           }
         </div>
-      }
+      </div>
     </div>
   </div>
 </div>

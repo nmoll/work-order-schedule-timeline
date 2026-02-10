@@ -54,6 +54,7 @@ ng-select {
 
 .timeline_right-panel {
   overflow-x: auto;
+  overflow-y: hidden;
   background-color: rgba(247, 249, 252, 1);
 }
 
@@ -86,6 +87,25 @@ ng-select {
 
 .timeline_month-column-header {
   text-align: center;
+  position: relative;
+}
+
+.timeline_current-column-label {
+  position: absolute;
+  top: 27px;
+  left: 0;
+  background-color: rgba(212, 215, 255, 1);
+  color: rgba(62, 64, 219, 1);
+  font-weight: 400;
+  font-size: 14px;
+  padding: 2px 8px;
+  border-radius: 5px;
+  z-index: 20;
+}
+
+.timeline_body {
+  height: 100%;
+  position: relative;
 }
 
 .timeline_row {
@@ -99,9 +119,30 @@ ng-select {
 }
 
 .timeline_row-column {
+  position: relative;
+}
+
+.timeline_columns {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+}
+
+.timeline_column {
   border-left: 1px solid var(--timeline-border-color);
   height: 100%;
-  position: relative;
+}
+
+.timeline_column:first {
+  border-left: 0;
+}
+
+.timeline_column.current {
+  border-width: 3px;
+  border-color: #d4d7ff;
 }
 
 .timeline_work-order {

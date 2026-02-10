@@ -59,17 +59,17 @@ export class TimelineComponent {
     switch (this.zoomLevel()) {
       case 'day': {
         const { start, count } = getDayRange(today);
-        columns = generateDayColumns(start, count);
+        columns = generateDayColumns(start, count, today);
         break;
       }
       case 'week': {
         const { start, count } = getWeekRange(today);
-        columns = generateWeekColumns(start, count);
+        columns = generateWeekColumns(start, count, today);
         break;
       }
       case 'month': {
         const { start, count } = getMonthRange(today);
-        columns = generateMonthColumns(start, count);
+        columns = generateMonthColumns(start, count, today);
         break;
       }
     }

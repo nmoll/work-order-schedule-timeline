@@ -22,3 +22,11 @@ Update the position fields in the viewModel with the following logic:
 
 - The left position should be a percentage of the columnWidth variable based on the start/end dates in the column. The math can be performed using the time stamps of all 3 dates
 - The width should be calculated using the start/end in the column \* the column width as the scale
+
+---
+
+Can you update the dates in my @src/app/shared/work-order/work-order-data.ts so there are no date overlaps for the same work center, and stretch each work order so that they are 3-8 months each
+
+---
+
+Update the timeline column to have an isCurrent property which is true if the day/week/month is the current day/week/month
