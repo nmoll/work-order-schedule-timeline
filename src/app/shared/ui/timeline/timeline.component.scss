@@ -2,17 +2,32 @@
   --timeline-border-color: rgba(230, 235, 240, 1);
   --timeline-row-height: 48px;
   height: 100%;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 ng-select {
-  width: 200px;
+  width: fit-content;
+  ::ng-deep .ng-dropdown-panel {
+    width: 200px;
+  }
+}
+
+ng-select.zoom-select {
   height: 25px;
+
+  ::ng-deep .ng-value,
+  ::ng-deep .ng-value-container,
+  ::ng-deep .ng-select-container {
+    overflow: visible !important;
+  }
 }
 
 .timescale-selector {
   display: flex;
-  margin-bottom: 24px;
-  margin-right: 2px;
+  align-items: center;
+  height: 25px;
   font-size: 13px;
   box-shadow: 1px 2.5px 3px -1.5px rgba(200, 207, 233, 1);
   width: fit-content;
@@ -20,18 +35,21 @@ ng-select {
 }
 
 .timescale-selector_label {
-  padding: 4px 8px 5px 8px;
+  padding: 0 8px;
   background-color: rgba(241, 243, 248, 0.75);
   font-weight: 400;
   color: rgba(104, 113, 150, 1);
   font-style: book;
   border-radius: 5px 0px 0px 5px;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .timescale-selector_select {
   display: flex;
   gap: 6.5px;
-  padding: 4px 8px 5px 8px;
+  padding: 0 8px;
   color: var(--text-color-primary);
   font-weight: 500;
   border-radius: 0px 5px 5px 0px;
@@ -149,7 +167,7 @@ ng-select {
   position: absolute;
   width: 300px;
   padding-left: 8px;
-  padding-right: 36px;
+  padding-right: 8px;
   border: 1px solid;
   border-radius: 8px;
   z-index: 10;
@@ -159,6 +177,7 @@ ng-select {
   color: rgba(3, 9, 41, 1);
   font-weight: 400;
   display: flex;
+  gap: 4px;
   align-items: center;
 }
 
@@ -193,7 +212,6 @@ ng-select {
 .timeline_work-order-status {
   font-size: 14px;
   font-weight: 400;
-  margin-right: 36px;
   padding: 2px 8px;
   border-radius: 5px;
 }
@@ -215,4 +233,20 @@ ng-select {
 .timeline_work-order.blocked .timeline_work-order-status {
   color: rgba(177, 54, 0, 1);
   background-color: rgba(252, 238, 181, 1);
+}
+
+.timeline_work-order-options-btn {
+  cursor: pointer;
+  visibility: hidden;
+  display: flex;
+  border: none;
+  width: 24px;
+  height: 22px;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgba(241, 243, 248, 1);
+}
+
+.timeline_work-order:hover .timeline_work-order-options-btn {
+  visibility: visible;
 }

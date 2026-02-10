@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, OnInit } from '@angular/core';
 import { WorkOrderStore } from '../../shared/work-order/work-order.store';
 import { Button } from '../../shared/ui/button/button.directive';
 import {
@@ -7,7 +7,11 @@ import {
   NgLabelTemplateDirective,
 } from '@ng-select/ng-select';
 import { Router } from '@angular/router';
-import { WorkOrderStatus, WorkOrderStatusTypes } from '../../shared/work-order/work-order';
+import {
+  WorkOrderData,
+  WorkOrderStatus,
+  WorkOrderStatusTypes,
+} from '../../shared/work-order/work-order';
 import { WorkOrderStatusDisplay } from '../../shared/ui/pipes/work-order-status-display.pipe';
 import { WorkOrderStatusComponent } from '../../shared/ui/work-order-status/work-order-status.component';
 import {
@@ -18,7 +22,6 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { JsonPipe } from '@angular/common';
 import {
   NgbDateAdapter,
   NgbDateParserFormatter,
@@ -39,7 +42,6 @@ import { NgbDateUSParserFormatter } from '../../shared/datepicker/ngb-date-us-pa
     WorkOrderStatusDisplay,
     WorkOrderStatusComponent,
     ReactiveFormsModule,
-    JsonPipe,
     NgbInputDatepicker,
   ],
   providers: [
@@ -47,12 +49,15 @@ import { NgbDateUSParserFormatter } from '../../shared/datepicker/ngb-date-us-pa
     { provide: NgbDateParserFormatter, useClass: NgbDateUSParserFormatter },
   ],
 })
-export class WorkOrderDetailsComponent {
+export class WorkOrderDetailsComponent implements OnInit {
   private workOrderStore = inject(WorkOrderStore);
   private router = inject(Router);
 
   workCenterId = input.required<string>();
   id = input.required<string>();
+  workOrder = computed(() => this.workOrderStore.findById(this.id())());
+
+  isEditing = computed(() => !!this.workOrder());
 
   formGroup = new FormGroup(
     {
@@ -80,28 +85,51 @@ export class WorkOrderDetailsComponent {
         return null;
       }
       const overlap = this.workOrderStore.findByWorkCenterContainingDate(this.workCenterId(), date);
+      if (overlap?.docId === this.id()) {
+        return null;
+      }
       return overlap ? { dateOverlap: { workOrderName: overlap.data.name } } : null;
     };
   }
 
-  workOrder = computed(() => {
-    const id = this.id();
-    if (!id) {
-      return null;
-    }
-    return this.workOrderStore.workOrders().find((wo) => wo.docId === id);
-  });
-
   statusOptions = WorkOrderStatusTypes;
 
-  onCreate() {
+  ngOnInit(): void {
+    const workOrder = this.workOrder();
+    if (workOrder) {
+      this.formGroup.setValue({
+        name: workOrder.data.name,
+        status: workOrder.data.status,
+        startDate: workOrder.data.startDate,
+        endDate: workOrder.data.endDate,
+      });
+    }
+  }
+
+  onSave() {
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
       return;
     }
+
+    const data: WorkOrderData = {
+      name: this.formGroup.value.name!,
+      status: this.formGroup.value.status!,
+      startDate: this.formGroup.value.startDate!,
+      endDate: this.formGroup.value.endDate!,
+      workCenterId: this.workCenterId(),
+    };
+
+    if (this.isEditing()) {
+      this.workOrderStore.updateWorkOrder(this.id(), data);
+    } else {
+      this.workOrderStore.createWorkOrder(data);
+    }
+
+    this.onClose();
   }
 
-  onCancel() {
+  onClose() {
     this.router.navigate([{ outlets: { 'side-panel': null } }]);
   }
 }

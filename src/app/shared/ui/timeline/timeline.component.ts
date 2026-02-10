@@ -1,7 +1,7 @@
 import { Component, computed, inject, Signal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgLabelTemplateDirective, NgSelectModule } from '@ng-select/ng-select';
+import { NgLabelTemplateDirective, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { WorkOrderStore } from '../../work-order/work-order.store';
 import { WorkCenterStore } from '../../work-center/work-center.store';
 import {
@@ -34,6 +34,9 @@ interface TimelineViewModel {
   }[];
 }
 
+const WorkOrderActions = ['Edit', 'Delete'] as const;
+type WorkOrderAction = (typeof WorkOrderActions)[number];
+
 @Component({
   selector: 'app-timeline',
   templateUrl: 'timeline.component.html',
@@ -52,6 +55,7 @@ export class TimelineComponent {
   workOrderStore = inject(WorkOrderStore);
 
   columnWidth = 113;
+  workOrderActions = WorkOrderActions;
 
   timescaleOptions = [
     { value: 'day', label: 'Day' },
@@ -122,7 +126,23 @@ export class TimelineComponent {
     };
   });
 
-  openWorkOrder(workCenterId: string, docId: string) {
-    this.router.navigate([{ outlets: { 'side-panel': ['work-order-details', workCenterId, docId] } }]);
+  onWorkOrderAction(
+    action: WorkOrderAction,
+    workCenterId: string,
+    workOrderId: string,
+    select: NgSelectComponent,
+  ) {
+    // Clear the selected option
+    select.writeValue('');
+    switch (action) {
+      case 'Edit':
+        this.router.navigate([
+          { outlets: { 'side-panel': ['work-order-details', workCenterId, workOrderId] } },
+        ]);
+        break;
+      case 'Delete':
+        this.workOrderStore.deleteWorkOrder(workOrderId);
+        break;
+    }
   }
 }

@@ -5,8 +5,10 @@
       <p>Specify the dates, name and status for this order</p>
     </div>
     <div class="buttons">
-      <button app-button type="button" (click)="onCancel()">Cancel</button>
-      <button app-button color="primary" type="button" (click)="onCreate()">Create</button>
+      <button app-button type="button" (click)="onClose()">Cancel</button>
+      <button app-button color="primary" type="button" (click)="onSave()">
+        {{ isEditing() ? 'Save' : 'Create' }}
+      </button>
     </div>
   </header>
   <section class="content">
@@ -94,8 +96,7 @@
           ) {
             <span class="error">End date is required</span>
           } @else if (
-            formGroup.controls.endDate.touched &&
-            formGroup.controls.endDate.hasError('dateOverlap')
+            formGroup.controls.endDate.touched && formGroup.controls.endDate.hasError('dateOverlap')
           ) {
             <span class="error">
               Date overlaps with "{{
@@ -107,8 +108,6 @@
           }
         </div>
       </div>
-
-      <pre>{{ formGroup.value | json }}</pre>
     } @else {
       <p>Work order not found.</p>
     }
