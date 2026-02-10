@@ -65,6 +65,8 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-bottom: 24px;
+  position: relative;
 
   .label {
     color: rgba(104, 113, 150, 1);
@@ -94,5 +96,13 @@ h1 {
   .input:focus {
     box-shadow: 0 0 0 2px rgba(170, 175, 255, 1);
     outline: none;
+  }
+
+  .error {
+    position: absolute;
+    bottom: -22px;
+    color: oklch(63.7% 0.237 25.331);
+    font-size: 12px;
+    font-weight: 400;
   }
 }

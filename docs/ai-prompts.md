@@ -56,3 +56,13 @@ I created @src/app/shared/ui/button/button.directive.ts. Can you implement this 
 please install @ng-bootstrap/ng-bootstrap and use the datepicker in the @src/app/feature/work-order-details/work-order-details.component.html. Clicking the input should trigger the date picker to open
 
 > After some back and forth sparring, managed to get the datepicker installed and working correctly
+
+Make each form element in @src/app/feature/work-order-details/work-order-details.component.ts required and show message if invalid and touched
+
+Add validation rule where end date cannot be before start date
+
+> Easier than looking up how to do cross field validation, since it's been a while since I've had to do it
+
+Add a new path parameter for workCenterId in the work order detail route
+
+Add another validator to both start and end dates: the date must not be contained within any work order for the same work center id. You can add a new method in the work order store that finds a work order by date

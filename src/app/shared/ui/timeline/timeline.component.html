@@ -73,7 +73,7 @@
                     [ngClass]="workOrder.workOrder.data.status"
                     [style.left]="workOrder.position.left + 'px'"
                     [style.width]="workOrder.position.width + 'px'"
-                    (click)="openWorkOrder(workOrder.workOrder.docId)"
+                    (click)="openWorkOrder(row.workCenter.docId, workOrder.workOrder.docId)"
                   >
                     <span class="timeline_work-order-name">
                       {{ workOrder.workOrder.data.name }}

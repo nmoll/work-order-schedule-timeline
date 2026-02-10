@@ -122,7 +122,7 @@ export class TimelineComponent {
     };
   });
 
-  openWorkOrder(docId: string) {
-    this.router.navigate([{ outlets: { 'side-panel': ['work-order-details', docId] } }]);
+  openWorkOrder(workCenterId: string, docId: string) {
+    this.router.navigate([{ outlets: { 'side-panel': ['work-order-details', workCenterId, docId] } }]);
   }
 }

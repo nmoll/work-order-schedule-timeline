@@ -23,4 +23,16 @@ export class WorkOrderStore {
       );
     });
   }
+
+  findByWorkCenterContainingDate(
+    workCenterId: string,
+    date: string,
+  ): WorkOrderDocument | undefined {
+    return this.workOrders().find(
+      (wo) =>
+        wo.data.workCenterId === workCenterId &&
+        date >= wo.data.startDate &&
+        date <= wo.data.endDate,
+    );
+  }
 }

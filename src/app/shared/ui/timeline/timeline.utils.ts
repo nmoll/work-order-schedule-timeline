@@ -41,8 +41,8 @@ export function getWeekRange(today: Date): TimelineRange {
 }
 
 export function getMonthRange(today: Date): TimelineRange {
-  const start = new Date(today.getFullYear(), today.getMonth() - 6, 1);
-  return { start, count: 13 };
+  const start = new Date(today.getFullYear(), today.getMonth() - 12, 1);
+  return { start, count: 25 };
 }
 
 export function generateDayColumns(start: Date, count: number, today: Date): TimelineColumn[] {
@@ -118,8 +118,7 @@ export function generateMonthColumns(start: Date, count: number, today: Date): T
     colEnd.setTime(colEnd.getTime() - 1);
 
     const isCurrent =
-      colStart.getFullYear() === today.getFullYear() &&
-      colStart.getMonth() === today.getMonth();
+      colStart.getFullYear() === today.getFullYear() && colStart.getMonth() === today.getMonth();
 
     columns.push({
       colNumber: i + 1,

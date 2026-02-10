@@ -10,9 +10,20 @@ import { Router } from '@angular/router';
 import { WorkOrderStatus, WorkOrderStatusTypes } from '../../shared/work-order/work-order';
 import { WorkOrderStatusDisplay } from '../../shared/ui/pipes/work-order-status-display.pipe';
 import { WorkOrderStatusComponent } from '../../shared/ui/work-order-status/work-order-status.component';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { JsonPipe } from '@angular/common';
-import { NgbDateAdapter, NgbDateParserFormatter, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDateAdapter,
+  NgbDateParserFormatter,
+  NgbInputDatepicker,
+} from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateStringAdapter } from '../../shared/datepicker/ngb-date-string-adapter';
 import { NgbDateUSParserFormatter } from '../../shared/datepicker/ngb-date-us-parser-formatter';
 
@@ -40,14 +51,38 @@ export class WorkOrderDetailsComponent {
   private workOrderStore = inject(WorkOrderStore);
   private router = inject(Router);
 
+  workCenterId = input.required<string>();
   id = input.required<string>();
 
-  formGroup = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    status: new FormControl<WorkOrderStatus>('blocked'),
-    startDate: new FormControl(''),
-    endDate: new FormControl(''),
-  });
+  formGroup = new FormGroup(
+    {
+      name: new FormControl('', [Validators.required]),
+      status: new FormControl<WorkOrderStatus>('blocked', [Validators.required]),
+      startDate: new FormControl('', [Validators.required, this.dateOverlapValidator()]),
+      endDate: new FormControl('', [Validators.required, this.dateOverlapValidator()]),
+    },
+    { validators: [WorkOrderDetailsComponent.dateRangeValidator] },
+  );
+
+  private static dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+    const start = group.get('startDate')?.value;
+    const end = group.get('endDate')?.value;
+    if (!start || !end) {
+      return null;
+    }
+    return start >= end ? { dateRange: true } : null;
+  }
+
+  private dateOverlapValidator(): (control: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const date = control.value;
+      if (!date) {
+        return null;
+      }
+      const overlap = this.workOrderStore.findByWorkCenterContainingDate(this.workCenterId(), date);
+      return overlap ? { dateOverlap: { workOrderName: overlap.data.name } } : null;
+    };
+  }
 
   workOrder = computed(() => {
     const id = this.id();
@@ -58,6 +93,13 @@ export class WorkOrderDetailsComponent {
   });
 
   statusOptions = WorkOrderStatusTypes;
+
+  onCreate() {
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
+    }
+  }
 
   onCancel() {
     this.router.navigate([{ outlets: { 'side-panel': null } }]);

@@ -6,7 +6,7 @@
     </div>
     <div class="buttons">
       <button app-button type="button" (click)="onCancel()">Cancel</button>
-      <button app-button color="primary" type="button">Create</button>
+      <button app-button color="primary" type="button" (click)="onCreate()">Create</button>
     </div>
   </header>
   <section class="content">
@@ -15,6 +15,9 @@
         <div class="form-field">
           <label for="name" class="label">Work Order Name</label>
           <input id="name" class="input" placeholder="Acme Inc." formControlName="name" />
+          @if (formGroup.controls.name.touched && formGroup.controls.name.hasError('required')) {
+            <span class="error">Work order name is required</span>
+          }
         </div>
 
         <div class="form-field">
@@ -36,6 +39,11 @@
               }
             </ng-template>
           </ng-select>
+          @if (
+            formGroup.controls.status.touched && formGroup.controls.status.hasError('required')
+          ) {
+            <span class="error">Status is required</span>
+          }
         </div>
 
         <div class="form-field">
@@ -51,6 +59,21 @@
             [container]="'body'"
             readonly
           />
+          @if (
+            formGroup.controls.startDate.touched &&
+            formGroup.controls.startDate.hasError('required')
+          ) {
+            <span class="error">Start date is required</span>
+          } @else if (
+            formGroup.controls.startDate.touched &&
+            formGroup.controls.startDate.hasError('dateOverlap')
+          ) {
+            <span class="error">
+              Date overlaps with "{{
+                formGroup.controls.startDate.getError('dateOverlap').workOrderName
+              }}"
+            </span>
+          }
         </div>
 
         <div class="form-field">
@@ -66,6 +89,22 @@
             [container]="'body'"
             readonly
           />
+          @if (
+            formGroup.controls.endDate.touched && formGroup.controls.endDate.hasError('required')
+          ) {
+            <span class="error">End date is required</span>
+          } @else if (
+            formGroup.controls.endDate.touched &&
+            formGroup.controls.endDate.hasError('dateOverlap')
+          ) {
+            <span class="error">
+              Date overlaps with "{{
+                formGroup.controls.endDate.getError('dateOverlap').workOrderName
+              }}"
+            </span>
+          } @else if (formGroup.controls.endDate.touched && formGroup.hasError('dateRange')) {
+            <span class="error">End date must be after start date</span>
+          }
         </div>
       </div>
 
