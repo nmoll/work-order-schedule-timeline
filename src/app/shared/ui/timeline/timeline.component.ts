@@ -65,6 +65,8 @@ export class TimelineComponent {
 
   zoomLevel = signal<'day' | 'week' | 'month'>('month');
 
+  rowHoverId = signal<string | null>(null);
+
   timelineColumns: Signal<TimelineColumn[]> = computed(() => {
     const today = new Date();
 

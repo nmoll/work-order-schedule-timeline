@@ -101,6 +101,10 @@ ng-select.zoom-select {
   align-items: center;
   height: var(--timeline-row-height);
   border-bottom: 1px solid var(--timeline-border-color);
+
+  &.timeline_left-panel-item--hover {
+    background-color: rgba(250, 251, 253, 1);
+  }
 }
 
 .timeline_month-column-header {
