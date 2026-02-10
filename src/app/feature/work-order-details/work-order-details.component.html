@@ -1,0 +1,62 @@
+<form [formGroup]="formGroup">
+  <header>
+    <div>
+      <h2>Work Order Details</h2>
+      <p>Specify the dates, name and status for this order</p>
+    </div>
+    <div class="buttons">
+      <button app-button type="button" (click)="onCancel()">Cancel</button>
+      <button app-button color="primary" type="button">Create</button>
+    </div>
+  </header>
+  <section class="content">
+    @if (workOrder(); as order) {
+      <div class="inputs">
+        <div class="form-field">
+          <label for="name" class="label">Work Order Name</label>
+          <input id="name" class="input" placeholder="Acme Inc." formControlName="name" />
+        </div>
+
+        <div class="form-field">
+          <label for="status" class="label">Status</label>
+          <ng-select
+            [items]="statusOptions"
+            [clearable]="false"
+            [searchable]="false"
+            id="status"
+            class="ng-select-input"
+            formControlName="status"
+          >
+            <ng-template ng-option-tmp let-item="item"
+              >{{ item | appWorkOrderStatusDisplay }}
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              @if (item) {
+                <app-work-order-status [status]="item" />
+              }
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-field">
+          <label for="startDate" class="label">Start date</label>
+          <input
+            id="startDate"
+            class="input"
+            placeholder="01.01.2026"
+            formControlName="startDate"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="endDate" class="label">End date</label>
+          <input id="endDate" class="input" placeholder="01.02.2026" formControlName="endDate" />
+        </div>
+      </div>
+
+      <pre>{{ formGroup.value | json }}</pre>
+    } @else {
+      <p>Work order not found.</p>
+    }
+  </section>
+</form>

@@ -1,5 +1,6 @@
 import { Component, computed, inject, Signal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgLabelTemplateDirective, NgSelectModule } from '@ng-select/ng-select';
 import { WorkOrderStore } from '../../work-order/work-order.store';
 import { WorkCenterStore } from '../../work-center/work-center.store';
@@ -13,8 +14,9 @@ import {
   getMonthRange,
   parseLocalDate,
 } from './timeline.utils';
-import { WorkOrderDocument, WorkOrderStatus } from '../../work-order/work-order';
+import { WorkOrderDocument } from '../../work-order/work-order';
 import { NgClass } from '@angular/common';
+import { WorkOrderStatusComponent } from '../work-order-status/work-order-status.component';
 
 interface TimelineViewModel {
   rows: {
@@ -36,9 +38,16 @@ interface TimelineViewModel {
   selector: 'app-timeline',
   templateUrl: 'timeline.component.html',
   styleUrl: 'timeline.component.scss',
-  imports: [NgClass, NgSelectModule, FormsModule, NgLabelTemplateDirective],
+  imports: [
+    NgClass,
+    NgSelectModule,
+    FormsModule,
+    NgLabelTemplateDirective,
+    WorkOrderStatusComponent,
+  ],
 })
 export class TimelineComponent {
+  private router = inject(Router);
   workCenterStore = inject(WorkCenterStore);
   workOrderStore = inject(WorkOrderStore);
 
@@ -113,10 +122,7 @@ export class TimelineComponent {
     };
   });
 
-  statusText: Record<WorkOrderStatus, string> = {
-    'in-progress': 'In progress',
-    blocked: 'Blocked',
-    complete: 'Complete',
-    open: 'Open',
-  };
+  openWorkOrder(docId: string) {
+    this.router.navigate([{ outlets: { 'side-panel': ['work-order-details', docId] } }]);
+  }
 }

@@ -53,6 +53,16 @@
       </div>
 
       <div class="timeline_body">
+        <div class="timeline_columns">
+          @for (column of timelineColumns(); track column.colNumber) {
+            <div
+              class="timeline_column"
+              [class.current]="column.isCurrent"
+              [style.width]="columnWidth + 'px'"
+            ></div>
+          }
+        </div>
+
         @for (row of viewModel().rows; track row.workCenter.docId) {
           <div class="timeline_row">
             @for (column of row.columns; track column.column.label) {
@@ -63,29 +73,18 @@
                     [ngClass]="workOrder.workOrder.data.status"
                     [style.left]="workOrder.position.left + 'px'"
                     [style.width]="workOrder.position.width + 'px'"
+                    (click)="openWorkOrder(workOrder.workOrder.docId)"
                   >
                     <span class="timeline_work-order-name">
                       {{ workOrder.workOrder.data.name }}
                     </span>
-                    <span class="timeline_work-order-status">
-                      {{ statusText[workOrder.workOrder.data.status] }}
-                    </span>
+                    <app-work-order-status [status]="workOrder.workOrder.data.status" />
                   </div>
                 }
               </div>
             }
           </div>
         }
-
-        <div class="timeline_columns">
-          @for (column of timelineColumns(); track column.colNumber) {
-            <div
-              class="timeline_column"
-              [class.current]="column.isCurrent"
-              [style.width]="columnWidth + 'px'"
-            ></div>
-          }
-        </div>
       </div>
     </div>
   </div>

@@ -10,4 +10,6 @@ export interface WorkOrderDocument {
   };
 }
 
-export type WorkOrderStatus = 'open' | 'in-progress' | 'complete' | 'blocked';
+export const WorkOrderStatusTypes = ['open', 'in-progress', 'complete', 'blocked'] as const;
+
+export type WorkOrderStatus = (typeof WorkOrderStatusTypes)[number];

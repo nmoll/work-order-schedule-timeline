@@ -1,21 +1,77 @@
-.ng-dropdown-panel {
-  box-shadow:
-    0 0 0 1px rgba(104, 113, 150, 0.1),
-    0 2.5px 3px -1.5px rgba(200, 207, 233, 1),
-    0 4.5px 5px -1px rgba(216, 220, 235, 1);
-  background-color: white;
-  border-radius: 5px;
-  padding: 12px 0;
-  top: 30px;
-}
+.ng-select {
+  &.ng-select-opened {
+    &.ng-select-clearable .ng-select-container.ng-has-value:hover {
+      .ng-clear-wrapper {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .ng-arrow-wrapper {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
 
-.ng-dropdown-panel .ng-option {
-  padding: 5px 12px;
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(47, 48, 89, 1);
-}
+    > .ng-select-container {
+      .ng-arrow-wrapper {
+        transform: rotate(180deg);
+        opacity: 1;
+      }
+    }
+  }
 
-.ng-dropdown-panel .ng-option.ng-option-selected {
-  color: var(--text-color-primary);
+  .ng-dropdown-panel {
+    box-shadow:
+      0 0 0 1px rgba(104, 113, 150, 0.1),
+      0 2.5px 3px -1.5px rgba(200, 207, 233, 1),
+      0 4.5px 5px -1px rgba(216, 220, 235, 1);
+    background-color: white;
+    border-radius: 5px;
+    padding: 12px 0;
+    top: 30px;
+  }
+
+  .ng-dropdown-panel .ng-option {
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(47, 48, 89, 1);
+  }
+
+  .ng-dropdown-panel .ng-option.ng-option-selected {
+    color: var(--text-color-primary);
+  }
+
+  &.ng-select-input {
+    box-shadow:
+      0 0 0 1px rgba(216, 220, 235, 1),
+      0 1.5px 3px -1.5px rgba(200, 207, 233, 1),
+      0 1px 0.5px -1px rgba(216, 220, 235, 1);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 1);
+    height: 38px;
+    display: flex;
+    align-items: center;
+  }
+
+  &.ng-select-input .ng-dropdown-panel {
+    top: 45px;
+  }
+
+  .ng-select-container {
+    padding: 0 8px;
+    align-items: center;
+  }
+
+  .ng-arrow-wrapper {
+    width: 16px;
+    height: 26px;
+    transition: transform 0.3s;
+
+    .ng-arrow {
+      border-style: solid;
+      border-width: 5px 4px 0 4px;
+      border-color: rgba(104, 113, 150, 1) transparent transparent transparent;
+      border-radius: 0.5px;
+    }
+  }
 }

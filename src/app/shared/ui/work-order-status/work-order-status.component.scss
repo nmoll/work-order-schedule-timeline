@@ -1,0 +1,29 @@
+.status {
+  font-size: 14px;
+  font-weight: 400;
+  margin-right: 36px;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+.open {
+  color: rgba(0, 176, 191, 1);
+  border: 1px solid rgba(206, 251, 255, 1);
+  background-color: rgba(228, 253, 255, 1);
+  font-weight: 500;
+}
+
+.in-progress {
+  color: rgba(62, 64, 219, 1);
+  background-color: rgba(214, 216, 255, 1);
+}
+
+.complete {
+  color: rgba(8, 162, 104, 1);
+  background-color: rgba(225, 255, 204, 1);
+}
+
+.blocked {
+  color: rgba(177, 54, 0, 1);
+  background-color: rgba(252, 238, 181, 1);
+}
