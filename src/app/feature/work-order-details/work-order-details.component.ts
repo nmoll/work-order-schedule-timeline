@@ -12,6 +12,9 @@ import { WorkOrderStatusDisplay } from '../../shared/ui/pipes/work-order-status-
 import { WorkOrderStatusComponent } from '../../shared/ui/work-order-status/work-order-status.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
+import { NgbDateAdapter, NgbDateParserFormatter, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStringAdapter } from '../../shared/datepicker/ngb-date-string-adapter';
+import { NgbDateUSParserFormatter } from '../../shared/datepicker/ngb-date-us-parser-formatter';
 
 @Component({
   selector: 'app-work-order-details',
@@ -26,6 +29,11 @@ import { JsonPipe } from '@angular/common';
     WorkOrderStatusComponent,
     ReactiveFormsModule,
     JsonPipe,
+    NgbInputDatepicker,
+  ],
+  providers: [
+    { provide: NgbDateAdapter, useClass: NgbDateStringAdapter },
+    { provide: NgbDateParserFormatter, useClass: NgbDateUSParserFormatter },
   ],
 })
 export class WorkOrderDetailsComponent {

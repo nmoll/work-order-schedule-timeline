@@ -53,6 +53,11 @@
     align-items: center;
   }
 
+  &.ng-select-input.ng-select-opened,
+  &.ng-select-input.ng-select-focused {
+    box-shadow: 0 0 0 2px rgba(170, 175, 255, 1);
+  }
+
   &.ng-select-input .ng-dropdown-panel {
     top: 45px;
   }

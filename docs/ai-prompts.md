@@ -12,8 +12,6 @@ In the @src/app/shared/work-order/work-order-data.ts please rename the existing 
 
 > This was really helpful!
 
----
-
 In the @src/app/shared/ui/timeline/timeline.component.ts I have timelineColumns which is a computed signal based on the timeline view signal. Please add logic to generate +- 2 weeks of days when the day view is selected, +- 2 months for week, and +- 6 months for the month view. To start, a column will just have a label like "Feb 9" "Feb 8-14" and "Feb 2026".
 
 > A little bit sloppy, but it works
@@ -54,3 +52,7 @@ Ok now when a work order item is clicked in the timeline let's navigate to this 
 I created @src/app/shared/ui/button/button.directive.ts. Can you implement this button to behave and follow the same coding conventions as the angular material button? The selector can be app-button and have an input for color which is either 'default' or 'primary'
 
 > Ok it did class binding in the host metadata and global styles. Makes sense.
+
+please install @ng-bootstrap/ng-bootstrap and use the datepicker in the @src/app/feature/work-order-details/work-order-details.component.html. Clicking the input should trigger the date picker to open
+
+> After some back and forth sparring, managed to get the datepicker installed and working correctly

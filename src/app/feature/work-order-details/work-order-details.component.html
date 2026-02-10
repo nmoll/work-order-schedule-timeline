@@ -45,12 +45,27 @@
             class="input"
             placeholder="01.01.2026"
             formControlName="startDate"
+            ngbDatepicker
+            #startDatePicker="ngbDatepicker"
+            (click)="startDatePicker.toggle()"
+            [container]="'body'"
+            readonly
           />
         </div>
 
         <div class="form-field">
           <label for="endDate" class="label">End date</label>
-          <input id="endDate" class="input" placeholder="01.02.2026" formControlName="endDate" />
+          <input
+            id="endDate"
+            class="input"
+            placeholder="02.01.2026"
+            formControlName="endDate"
+            ngbDatepicker
+            #endDatePicker="ngbDatepicker"
+            (click)="endDatePicker.toggle()"
+            [container]="'body'"
+            readonly
+          />
         </div>
       </div>
 

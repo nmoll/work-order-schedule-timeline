@@ -29,7 +29,14 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss", "src/ng-select-theme.scss"]
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.scss",
+              "src/ng-select-theme.scss"
+            ],
+            "polyfills": [
+              "@angular/localize/init"
+            ]
           },
           "configurations": {
             "production": {
