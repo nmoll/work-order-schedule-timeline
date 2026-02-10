@@ -1,0 +1,11 @@
+@if (isOpen()) {
+  <div
+    class="backdrop"
+    [animate.enter]="'backdrop-enter'"
+    [animate.leave]="'backdrop-leave'"
+    (click)="close()"
+  ></div>
+}
+<aside class="panel" [class.open]="isOpen()">
+  <ng-content />
+</aside>

@@ -6,4 +6,6 @@
   <router-outlet />
 </section>
 
-<app-side-panel />
+<app-side-panel [isOpen]="sidePanelOutlet.isActivated">
+  <router-outlet name="side-panel" #sidePanelOutlet="outlet" />
+</app-side-panel>

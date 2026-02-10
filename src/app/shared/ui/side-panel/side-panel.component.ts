@@ -1,22 +1,9 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-side-panel',
-  imports: [RouterOutlet],
-  template: `
-    @if (isOpen()) {
-      <div
-        class="backdrop"
-        [animate.enter]="'backdrop-enter'"
-        [animate.leave]="'backdrop-leave'"
-        (click)="close()"
-      ></div>
-      <aside class="panel" [animate.enter]="'panel-enter'" [animate.leave]="'panel-leave'">
-        <router-outlet name="side-panel" />
-      </aside>
-    }
-  `,
+  templateUrl: 'side-panel.component.html',
   styles: `
     :host {
       display: contents;
@@ -44,6 +31,12 @@ import { Router, RouterOutlet } from '@angular/router';
       z-index: 101;
       overflow-y: auto;
       border-radius: 12px 0px 0px 12px;
+      transform: translateX(100%);
+      transition: transform 200ms ease-out;
+    }
+
+    .panel.open {
+      transform: translateX(0);
     }
 
     .backdrop-enter {
@@ -52,14 +45,6 @@ import { Router, RouterOutlet } from '@angular/router';
 
     .backdrop-leave {
       animation: fade-out 200ms ease-in;
-    }
-
-    .panel-enter {
-      animation: slide-in 200ms ease-out;
-    }
-
-    .panel-leave {
-      animation: slide-out 200ms ease-in;
     }
 
     @keyframes fade-in {
@@ -79,32 +64,12 @@ import { Router, RouterOutlet } from '@angular/router';
         opacity: 0;
       }
     }
-
-    @keyframes slide-in {
-      from {
-        transform: translateX(100%);
-      }
-      to {
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes slide-out {
-      from {
-        transform: translateX(0);
-      }
-      to {
-        transform: translateX(100%);
-      }
-    }
   `,
 })
 export class SidePanelComponent {
   private router = inject(Router);
 
-  isOpen() {
-    return this.router.parseUrl(this.router.url).root.children['side-panel'] != null;
-  }
+  isOpen = input(false);
 
   close() {
     this.router.navigate([{ outlets: { 'side-panel': null } }]);
