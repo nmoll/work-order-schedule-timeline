@@ -66,6 +66,9 @@ export class TimelineComponentStore {
 
   readonly zoomLevel = signal<'day' | 'week' | 'month'>('month');
 
+  readonly extendStart = signal(0);
+  readonly extendEnd = signal(0);
+
   readonly rowHover = signal<RowHoverData | null>(null);
   readonly addDatesPosition = signal({ left: 0, width: 0 });
 
@@ -92,22 +95,27 @@ export class TimelineComponentStore {
 
   readonly timelineColumns = computed<TimelineColumn[]>(() => {
     const today = new Date();
+    const extendStart = Math.max(0, Math.trunc(this.extendStart()));
+    const extendEnd = Math.max(0, Math.trunc(this.extendEnd()));
 
     let columns: TimelineColumn[];
     switch (this.zoomLevel()) {
       case 'day': {
         const { start, count } = getDayRange(today);
-        columns = generateDayColumns(start, count, today);
+        start.setDate(start.getDate() - extendStart);
+        columns = generateDayColumns(start, count + extendStart + extendEnd, today);
         break;
       }
       case 'week': {
         const { start, count } = getWeekRange(today);
-        columns = generateWeekColumns(start, count, today);
+        start.setDate(start.getDate() - extendStart * 7);
+        columns = generateWeekColumns(start, count + extendStart + extendEnd, today);
         break;
       }
       case 'month': {
         const { start, count } = getMonthRange(today);
-        columns = generateMonthColumns(start, count, today);
+        start.setMonth(start.getMonth() - extendStart);
+        columns = generateMonthColumns(start, count + extendStart + extendEnd, today);
         break;
       }
     }
@@ -122,7 +130,8 @@ export class TimelineComponentStore {
     }
     const start = columns[0].start;
     const end = columns[columns.length - 1].end;
-    return { start, end, totalMs: end.getTime() - start.getTime() };
+    // `end` is inclusive (end-of-day/-period), so treat the range as [start, endExclusive).
+    return { start, end, totalMs: end.getTime() - start.getTime() + 1 };
   });
 
   private readonly totalTimelineWidth = computed(
@@ -133,39 +142,38 @@ export class TimelineComponentStore {
     const range = this.timelineRange();
     const totalWidth = this.totalTimelineWidth();
     const rangeStartTime = range.start.getTime();
-    const rangeEndTime = range.end.getTime();
+    const rangeEndExclusiveTime = range.end.getTime() + 1;
     const workCenters = this.workCenterStore.workCenters();
     const workOrders = this.workOrderStore.workOrders();
 
     return {
       range,
       rows: workCenters.map((workCenter) => {
+        const workOrdersForWorkCenter = workOrders
+          .filter((workOrder) => workOrder.data.workCenterId === workCenter.docId)
+          .map((workOrder) => {
+            const startTime = parseLocalDate(workOrder.data.startDate).getTime();
+            const endExclusive = parseLocalDate(workOrder.data.endDate);
+            endExclusive.setDate(endExclusive.getDate() + 1);
+            const endExclusiveTime = endExclusive.getTime();
+            return { workOrder, startTime, endExclusiveTime };
+          });
+
         return {
           workCenter,
-          workOrders: workOrders
-            .filter((workOrder) => {
-              if (workOrder.data.workCenterId !== workCenter.docId) {
-                return false;
-              }
-              return (
-                parseLocalDate(workOrder.data.startDate) < range.end &&
-                parseLocalDate(workOrder.data.endDate) > range.start
-              );
+          workOrders: workOrdersForWorkCenter
+            .filter(({ startTime, endExclusiveTime }) => {
+              // Show any work order that intersects the timeline range:
+              // - start or end is within the range, OR
+              // - the work order fully encompasses the range
+              return startTime < rangeEndExclusiveTime && endExclusiveTime > rangeStartTime;
             })
-            .map((workOrder) => {
-              const woStartTime = parseLocalDate(workOrder.data.startDate).getTime();
-              const woEndTime = parseLocalDate(workOrder.data.endDate).getTime();
-
-              // Clamp to visible range
-              // Todo: add infinite scrolling instead
-              const clampedStart = Math.max(woStartTime, rangeStartTime);
-              const clampedEnd = Math.min(woEndTime, rangeEndTime);
-
+            .map(({ workOrder, startTime, endExclusiveTime }) => {
               return {
                 workOrder,
                 position: {
-                  left: ((clampedStart - rangeStartTime) / range.totalMs) * totalWidth,
-                  width: ((clampedEnd - clampedStart) / range.totalMs) * totalWidth,
+                  left: ((startTime - rangeStartTime) / range.totalMs) * totalWidth,
+                  width: ((endExclusiveTime - startTime) / range.totalMs) * totalWidth,
                 },
               };
             }),
@@ -175,6 +183,12 @@ export class TimelineComponentStore {
   });
 
   constructor() {
+    effect(() => {
+      this.zoomLevel();
+      this.extendStart.set(0);
+      this.extendEnd.set(0);
+    });
+
     effect(() => {
       const hover = this.rowHover();
       if (hover?.addDates?.visible) {
@@ -269,4 +283,12 @@ export class TimelineComponentStore {
       { queryParams: { startDate: formatLocalDate(startDate), endDate: formatLocalDate(endDate) } },
     );
   };
+
+  extendTimelineStart(columns: number) {
+    this.extendStart.update((start) => start + columns);
+  }
+
+  extendTimelineEnd(columns: number) {
+    this.extendEnd.update((end) => end + columns);
+  }
 }
