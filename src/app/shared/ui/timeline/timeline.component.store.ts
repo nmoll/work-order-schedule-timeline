@@ -4,6 +4,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { WorkCenterStore } from '../../work-center/work-center.store';
 import { WorkOrderStore } from '../../work-order/work-order.store';
 import { WorkOrderDocument } from '../../work-order/work-order';
+import { WorkCenterDocument } from '../../work-center/work-center';
 import {
   formatLocalDate,
   generateDayColumns,
@@ -71,9 +72,7 @@ export class TimelineComponentStore {
   readonly rowHoverIndex = computed(() => {
     const hover = this.rowHover();
     if (!hover) return -1;
-    return this.workCenterStore
-      .workCenters()
-      .findIndex((wc) => wc.docId === hover.workCenterId);
+    return this.workCenterStore.workCenters().findIndex((wc) => wc.docId === hover.workCenterId);
   });
 
   readonly rowHighlightTop = computed(() => {
@@ -123,7 +122,9 @@ export class TimelineComponentStore {
     return { start, end, totalMs: end.getTime() - start.getTime() };
   });
 
-  private readonly totalTimelineWidth = computed(() => this.timelineColumns().length * this.columnWidth);
+  private readonly totalTimelineWidth = computed(
+    () => this.timelineColumns().length * this.columnWidth,
+  );
 
   readonly viewModel = computed<TimelineViewModel>(() => {
     const columns = this.timelineColumns();

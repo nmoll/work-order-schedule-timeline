@@ -1,4 +1,4 @@
-interface WorkCenterDocument {
+export interface WorkCenterDocument {
   docId: string;
   docType: 'workCenter';
   data: {

@@ -1,3 +1,5 @@
+import { WorkCenterDocument } from './work-center';
+
 export const WORK_CENTERS: WorkCenterDocument[] = [
   {
     docId: '100',
