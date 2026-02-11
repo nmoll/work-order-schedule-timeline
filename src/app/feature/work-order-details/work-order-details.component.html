@@ -6,14 +6,14 @@
     </div>
     <div class="buttons">
       <button app-button type="button" (click)="onClose()">Cancel</button>
-      <button app-button color="primary" type="button" (click)="onSave()">
+      <button app-button color="primary" type="button" (click)="onSave()" test-id="saveBtn">
         {{ isEditing() ? 'Save' : 'Create' }}
       </button>
     </div>
   </header>
   <section class="content">
     <div class="inputs">
-      <div class="form-field">
+      <div class="form-field" data-id="nameField">
         <label for="name" class="label">Work Order Name</label>
         <input id="name" class="input" placeholder="Acme Inc." formControlName="name" />
         @if (formGroup.controls.name.touched && formGroup.controls.name.hasError('required')) {
@@ -21,7 +21,7 @@
         }
       </div>
 
-      <div class="form-field">
+      <div class="form-field" data-id="statusField">
         <label for="status" class="label">Status</label>
         <ng-select
           [items]="statusOptions"

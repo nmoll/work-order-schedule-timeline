@@ -82,7 +82,6 @@ export class WorkOrderStore {
 
   createWorkOrder(data: WorkOrderData) {
     const id = `${Math.random() * 10000}`;
-    console.log(id);
     const workOrder: WorkOrderDocument = {
       docType: 'workOrder',
       docId: id,
