@@ -1,7 +1,9 @@
-import { computed, Injectable, Signal, signal } from '@angular/core';
+import { computed, effect, Injectable, Signal, signal } from '@angular/core';
 import { WorkOrderData, WorkOrderDocument } from './work-order';
 import { parseLocalDate } from '../ui/timeline/timeline.utils';
 import { WORK_ORDERS } from './work-order-data';
+
+const localStorageKey = 'work_orders';
 
 @Injectable({
   providedIn: 'root',
@@ -9,9 +11,28 @@ import { WORK_ORDERS } from './work-order-data';
 export class WorkOrderStore {
   workOrders = signal<WorkOrderDocument[]>([]);
 
+  constructor() {
+    effect(() => {
+      localStorage.setItem(localStorageKey, JSON.stringify(this.workOrders()));
+    });
+  }
+
   /** @upgrade load data from backend */
   load() {
-    this.workOrders.set(WORK_ORDERS);
+    let workOrders: WorkOrderDocument[] = [];
+
+    const savedWorkOrders = localStorage.getItem(localStorageKey);
+    if (savedWorkOrders) {
+      try {
+        workOrders = JSON.parse(savedWorkOrders);
+      } catch (e) {
+        workOrders = WORK_ORDERS;
+      }
+    } else {
+      workOrders = WORK_ORDERS;
+    }
+
+    this.workOrders.set(workOrders);
   }
 
   findById(id: string): Signal<WorkOrderDocument | undefined> {
