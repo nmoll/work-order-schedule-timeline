@@ -65,6 +65,13 @@ h1 {
   color: white;
 }
 
+.app-button--small {
+  font-size: 13px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-radius: 5px;
+}
+
 /** Forms */
 .form-field {
   display: flex;

@@ -8,6 +8,7 @@ import { TimelineComponentStore } from './timeline.component.store';
 import { WorkCenterStore } from '../../work-center/work-center.store';
 import { WorkOrderStore } from '../../work-order/work-order.store';
 import { InfiniteScrollAnchorDirective } from '../infinite-scroll-anchor/infinite-scroll-anchor.directive';
+import { Button } from '../button/button.directive';
 
 @Component({
   selector: 'app-timeline',
@@ -22,6 +23,7 @@ import { InfiniteScrollAnchorDirective } from '../infinite-scroll-anchor/infinit
     WorkOrderStatusComponent,
     A11yModule,
     InfiniteScrollAnchorDirective,
+    Button,
   ],
 })
 export class TimelineComponent {
@@ -38,12 +40,7 @@ export class TimelineComponent {
     this.workOrderStore.load();
 
     effect(() => {
-      const el = this.currentColumn();
-      if (el) {
-        setTimeout(() => {
-          el.nativeElement.scrollIntoView({ inline: 'center', block: 'nearest' });
-        });
-      }
+      this.onScrollTodayIntoView();
     });
   }
 
@@ -74,5 +71,14 @@ export class TimelineComponent {
   onExtendTimelineEnd(): void {
     const extendBy = this.getInfiniteScrollExtendBy();
     this.store.extendTimelineEnd(extendBy);
+  }
+
+  onScrollTodayIntoView(behavior: 'smooth' | undefined = undefined) {
+    const el = this.currentColumn();
+    if (el) {
+      setTimeout(() => {
+        el.nativeElement.scrollIntoView({ inline: 'center', block: 'nearest', behavior });
+      });
+    }
   }
 }

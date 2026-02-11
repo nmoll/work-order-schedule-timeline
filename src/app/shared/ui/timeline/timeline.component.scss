@@ -23,6 +23,11 @@ ng-select.zoom-select {
   }
 }
 
+.toolbar {
+  display: flex;
+  gap: 16px;
+}
+
 .timescale-selector {
   display: flex;
   align-items: center;
