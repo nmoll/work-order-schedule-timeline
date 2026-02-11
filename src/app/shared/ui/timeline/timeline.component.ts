@@ -7,6 +7,7 @@ import { WorkOrderStatusComponent } from '../work-order-status/work-order-status
 import { TimelineComponentStore } from './timeline.component.store';
 import { WorkCenterStore } from '../../work-center/work-center.store';
 import { WorkOrderStore } from '../../work-order/work-order.store';
+import { InfiniteScrollAnchorDirective } from '../infinite-scroll-anchor/infinite-scroll-anchor.directive';
 
 @Component({
   selector: 'app-timeline',
@@ -20,6 +21,7 @@ import { WorkOrderStore } from '../../work-order/work-order.store';
     NgLabelTemplateDirective,
     WorkOrderStatusComponent,
     A11yModule,
+    InfiniteScrollAnchorDirective,
   ],
 })
 export class TimelineComponent {
@@ -28,6 +30,7 @@ export class TimelineComponent {
   readonly store = inject(TimelineComponentStore);
 
   readonly currentColumn = viewChild<ElementRef>('currentColumn');
+  readonly timelineRightPanel = viewChild<ElementRef<HTMLElement>>('timelineRightPanel');
 
   constructor() {
     /** @upgrade assuming data would be async, should show loading skeleton when data is loading */
@@ -42,5 +45,34 @@ export class TimelineComponent {
         });
       }
     });
+  }
+
+  private getInfiniteScrollExtendBy(): number {
+    switch (this.store.zoomLevel()) {
+      case 'day':
+        return 30;
+      case 'week':
+        return 8;
+      case 'month':
+        return 6;
+    }
+  }
+
+  onExtendTimelineStart(): void {
+    const extendBy = this.getInfiniteScrollExtendBy();
+    this.store.extendTimelineStart(extendBy);
+
+    const rightPanel = this.timelineRightPanel()?.nativeElement;
+    if (!rightPanel) return;
+
+    const delta = extendBy * this.store.columnWidth;
+    setTimeout(() => {
+      rightPanel.scrollLeft += delta;
+    });
+  }
+
+  onExtendTimelineEnd(): void {
+    const extendBy = this.getInfiniteScrollExtendBy();
+    this.store.extendTimelineEnd(extendBy);
   }
 }

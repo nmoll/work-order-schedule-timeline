@@ -97,3 +97,9 @@ Ok the last thing I need to do for accessiblity is provide a way to add dates fo
 > Now keyboard users should be able to do everything. Wow I can't believe this just worked first try :mind-blown:
 
 Please create a timeline.component.store.ts and move all appropriate state and methods into it so the component is simple as possible
+
+Let's create a shared directive for "infinite scroll anchor" which will detect when it's visible and emit an event
+
+> Been a little while since I've used intersection observers
+
+Let's attach this to the second to last column column on each side of the timeline, and when the visible event is emitted, call the extendTimelineStart/extendTimelineEnd store methods

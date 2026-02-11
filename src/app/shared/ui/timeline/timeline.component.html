@@ -48,7 +48,7 @@
       </div>
     }
   </div>
-  <div class="timeline_right-panel">
+  <div #timelineRightPanel class="timeline_right-panel">
     <div class="timeline_right-panel-scroller">
       <div class="timeline_header">
         @for (column of store.timelineColumns(); track column.label) {
@@ -66,12 +66,30 @@
 
       <div class="timeline_body">
         <div class="timeline_columns">
-          @for (column of store.timelineColumns(); track column.colNumber) {
-            <div
-              class="timeline_column"
-              [class.current]="column.isCurrent"
-              [style.width]="store.columnWidth + 'px'"
-            ></div>
+          @for (column of store.timelineColumns(); track column.colNumber; let index = $index; let count = $count) {
+            @if (index === 1) {
+              <div
+                appInfiniteScrollAnchor
+                class="timeline_column"
+                [class.current]="column.isCurrent"
+                [style.width]="store.columnWidth + 'px'"
+                (infiniteScrollAnchorVisible)="onExtendTimelineStart()"
+              ></div>
+            } @else if (index === count - 2) {
+              <div
+                appInfiniteScrollAnchor
+                class="timeline_column"
+                [class.current]="column.isCurrent"
+                [style.width]="store.columnWidth + 'px'"
+                (infiniteScrollAnchorVisible)="onExtendTimelineEnd()"
+              ></div>
+            } @else {
+              <div
+                class="timeline_column"
+                [class.current]="column.isCurrent"
+                [style.width]="store.columnWidth + 'px'"
+              ></div>
+            }
           }
         </div>
 
