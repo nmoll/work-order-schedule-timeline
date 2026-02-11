@@ -86,6 +86,8 @@ export class TimelineComponent {
 
   zoomLevel = signal<'day' | 'week' | 'month'>('month');
 
+  addDatesPosition = signal({ left: 0, width: 0 });
+
   constructor() {
     effect(() => {
       const el = this.currentColumn();
@@ -95,9 +97,42 @@ export class TimelineComponent {
         });
       }
     });
+
+    effect(() => {
+      const hover = this.rowHover();
+      if (hover?.addDates?.visible) {
+        this.addDatesPosition.set({
+          left: hover.addDates.left,
+          width: hover.addDates.right - hover.addDates.left,
+        });
+      }
+    });
   }
 
+  private readonly headerHeight = 37;
+  private readonly rowHeight = 48;
+
   rowHover = signal<RowHoverData | null>(null);
+
+  rowHoverIndex = computed(() => {
+    const hover = this.rowHover();
+    if (!hover) return -1;
+    return this.workCenterStore
+      .workCenters()
+      .findIndex((wc) => wc.docId === hover.workCenterId);
+  });
+
+  rowHighlightTop = computed(() => {
+    const index = this.rowHoverIndex();
+    if (index < 0) return '0px';
+    return `${this.headerHeight + index * this.rowHeight}px`;
+  });
+
+  addDatesTop = computed(() => {
+    const index = this.rowHoverIndex();
+    if (index < 0) return '0px';
+    return `${index * this.rowHeight + 4}px`;
+  });
 
   timelineColumns: Signal<TimelineColumn[]> = computed(() => {
     const today = new Date();

@@ -63,11 +63,32 @@ ng-select.zoom-select {
   grid-template-columns: max-content 1fr;
   width: 100%;
   overflow-x: hidden;
+  position: relative;
+}
+
+.timeline_row-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--timeline-row-height);
+  background: linear-gradient(to right, rgba(250, 251, 253, 1) 380px, rgba(238, 240, 255, 0.5) 380px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition:
+    top 0.2s ease,
+    opacity 0.15s ease;
+}
+
+.timeline_row-highlight--visible {
+  opacity: 1;
 }
 
 .timeline_left-panel {
   width: 380px;
   border-right: 1px solid var(--timeline-border-color);
+  position: relative;
+  z-index: 2;
 }
 
 .timeline_right-panel {
@@ -102,10 +123,6 @@ ng-select.zoom-select {
   align-items: center;
   height: var(--timeline-row-height);
   border-bottom: 1px solid var(--timeline-border-color);
-
-  &.timeline_left-panel-item--hover {
-    background-color: rgba(250, 251, 253, 1);
-  }
 }
 
 .timeline_month-column-header {
@@ -135,11 +152,6 @@ ng-select.zoom-select {
   height: var(--timeline-row-height);
   display: flex;
   position: relative;
-}
-
-.timeline_row:hover {
-  background-color: rgba(238, 240, 255, 1);
-  cursor: pointer;
 }
 
 .timeline_row-column {
@@ -262,10 +274,17 @@ ng-select.zoom-select {
   border-radius: 8px;
   background-color: rgba(101, 112, 255, 0.1);
   position: absolute;
-  top: 4px;
-  bottom: 4px;
+  height: calc(var(--timeline-row-height) - 8px);
   z-index: 20;
   pointer-events: none;
+  opacity: 0;
+  transition:
+    top 0.2s ease,
+    opacity 0.15s ease;
+}
+
+.timeline_add-dates-button--visible {
+  opacity: 1;
 
   .timeline_add-dates-button_tooltip {
     position: absolute;

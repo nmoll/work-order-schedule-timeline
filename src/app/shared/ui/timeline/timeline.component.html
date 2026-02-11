@@ -33,13 +33,15 @@
 </ng-select>
 
 <div class="timeline">
+  <div
+    class="timeline_row-highlight"
+    [class.timeline_row-highlight--visible]="rowHover() !== null"
+    [style.top]="rowHighlightTop()"
+  ></div>
   <div class="timeline_left-panel">
     <div class="timeline_header">Work Center</div>
     @for (workCenter of workCenterStore.workCenters(); track workCenter.docId) {
-      <div
-        class="timeline_left-panel-item"
-        [class.timeline_left-panel-item--hover]="rowHover()?.workCenterId === workCenter.docId"
-      >
+      <div class="timeline_left-panel-item">
         {{ workCenter.data.name }}
       </div>
     }
@@ -127,19 +129,20 @@
               </div>
             }
 
-            @if (rowHover(); as hover) {
-              @if (hover.workCenterId === row.workCenter.docId && hover.addDates.visible) {
-                <div
-                  class="timeline_add-dates-button"
-                  [style.left]="hover.addDates.left + 'px'"
-                  [style.width]="hover.addDates.right - hover.addDates.left + 'px'"
-                >
-                  <div class="timeline_add-dates-button_tooltip">Click to add dates</div>
-                </div>
-              }
-            }
           </div>
         }
+
+        <div
+          class="timeline_add-dates-button"
+          [class.timeline_add-dates-button--visible]="rowHover()?.addDates?.visible"
+          [style.top]="addDatesTop()"
+          [style.left]="addDatesPosition().left + 'px'"
+          [style.width]="addDatesPosition().width + 'px'"
+        >
+          @if (rowHover()?.addDates?.visible) {
+            <div class="timeline_add-dates-button_tooltip">Click to add dates</div>
+          }
+        </div>
       </div>
     </div>
   </div>
