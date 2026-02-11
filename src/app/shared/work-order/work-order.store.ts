@@ -13,7 +13,7 @@ export class WorkOrderStore {
     return computed(() => this.workOrders().find((workOrder) => workOrder.docId === id));
   }
 
-  findByWorkCenterAndStartDate(
+  findByWorkCenterAndDateRange(
     workCenterId: string,
     rangeStart: Date,
     rangeEnd: Date,
@@ -22,8 +22,8 @@ export class WorkOrderStore {
       return this.workOrders().filter(
         (workOrder) =>
           workOrder.data.workCenterId === workCenterId &&
-          parseLocalDate(workOrder.data.startDate) >= rangeStart &&
-          parseLocalDate(workOrder.data.startDate) <= rangeEnd,
+          parseLocalDate(workOrder.data.startDate) < rangeEnd &&
+          parseLocalDate(workOrder.data.endDate) > rangeStart,
       );
     });
   }

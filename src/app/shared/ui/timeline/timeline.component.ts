@@ -31,15 +31,13 @@ import { WorkOrderStatusComponent } from '../work-order-status/work-order-status
 interface TimelineViewModel {
   rows: {
     workCenter: WorkCenterDocument;
-    columns: {
-      column: TimelineColumn;
-      workOrders: {
-        workOrder: WorkOrderDocument;
-        position: {
-          left: number;
-          width: number;
-        };
-      }[];
+    columns: TimelineColumn[];
+    workOrders: {
+      workOrder: WorkOrderDocument;
+      position: {
+        left: number;
+        width: number;
+      };
     }[];
   }[];
 }
@@ -126,35 +124,51 @@ export class TimelineComponent {
     return columns;
   });
 
+  timelineRange = computed(() => {
+    const columns = this.timelineColumns();
+    if (columns.length === 0) {
+      return { start: new Date(), end: new Date(), totalMs: 1 };
+    }
+    const start = columns[0].start;
+    const end = columns[columns.length - 1].end;
+    return { start, end, totalMs: end.getTime() - start.getTime() };
+  });
+
+  totalTimelineWidth = computed(() => this.timelineColumns().length * this.columnWidth);
+
   viewModel: Signal<TimelineViewModel> = computed(() => {
+    const columns = this.timelineColumns();
+    const range = this.timelineRange();
+    const totalWidth = this.totalTimelineWidth();
+    const rangeStartTime = range.start.getTime();
+    const rangeEndTime = range.end.getTime();
+
     return {
       rows: this.workCenterStore.workCenters().map((workCenter) => {
+        const workOrders = this.workOrderStore.findByWorkCenterAndDateRange(
+          workCenter.docId,
+          range.start,
+          range.end,
+        );
+
         return {
           workCenter,
-          columns: this.timelineColumns().map((column) => {
-            const workOrders = this.workOrderStore.findByWorkCenterAndStartDate(
-              workCenter.docId,
-              column.start,
-              column.end,
-            );
-            const colStartTime = column.start.getTime();
-            const colEndTime = column.end.getTime();
-            const colDuration = colEndTime - colStartTime;
+          columns,
+          workOrders: workOrders().map((workOrder) => {
+            const woStartTime = parseLocalDate(workOrder.data.startDate).getTime();
+            const woEndTime = parseLocalDate(workOrder.data.endDate).getTime();
+
+            // Clamp to visible range
+            // Todo: add infinite scrolling instead
+            const clampedStart = Math.max(woStartTime, rangeStartTime);
+            const clampedEnd = Math.min(woEndTime, rangeEndTime);
 
             return {
-              column,
-              workOrders: workOrders().map((workOrder) => {
-                const woStartTime = parseLocalDate(workOrder.data.startDate).getTime();
-                const woEndTime = parseLocalDate(workOrder.data.endDate).getTime();
-
-                return {
-                  workOrder,
-                  position: {
-                    left: ((woStartTime - colStartTime) / colDuration) * this.columnWidth,
-                    width: ((woEndTime - woStartTime) / colDuration) * this.columnWidth,
-                  },
-                };
-              }),
+              workOrder,
+              position: {
+                left: ((clampedStart - rangeStartTime) / range.totalMs) * totalWidth,
+                width: ((clampedEnd - clampedStart) / range.totalMs) * totalWidth,
+              },
             };
           }),
         };
@@ -186,12 +200,9 @@ export class TimelineComponent {
     const row = event.currentTarget as HTMLElement;
     const positionX = event.clientX - row.getBoundingClientRect().left;
     const vmRow = this.viewModel().rows.find((r) => r.workCenter.docId === workCenterId);
-    const addDatesVisible = !vmRow?.columns.some((col, colIndex) =>
-      col.workOrders.some((wo) => {
-        const woLeft = colIndex * this.columnWidth + wo.position.left;
-        return positionX >= woLeft && positionX <= woLeft + wo.position.width;
-      }),
-    );
+    const addDatesVisible = !vmRow?.workOrders.some((wo) => {
+      return positionX >= wo.position.left && positionX <= wo.position.left + wo.position.width;
+    });
     this.rowHover.set({
       workCenterId,
       addDates: {

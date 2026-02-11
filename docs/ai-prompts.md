@@ -76,3 +76,7 @@ Add a "addDatesVisible" to the row hover object and set it to false if the user 
 > Feels like cheating sometimes
 
 when the add dates button is clicked, calculate the date based on the clicked position on the timeline and navigate to the work order detail with this start date, and with an end date +7 days from this
+
+Let's update the work order positioning logic to be not tied to a column, but relative to the whole scroll view so we don't have the problem of work orders not showing if the start column is not rendered
+
+> I realized my approach is too complicated and the display logic can be flattened
