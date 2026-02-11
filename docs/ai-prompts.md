@@ -91,3 +91,7 @@ Ok I'm running voiceover and want a few things fixed for a11y:
 - The row options button should be labelled as "<work order name> action menu"
 
 > Let's not forget screen reader users
+
+Ok the last thing I need to do for accessiblity is provide a way to add dates for a keyboard user. Can we have a hidden tabbable button inside each row in the timeline which is fixed to the left of the scrollable element (always visible) which when activated will show and hitting enter will open the work order details side panel with the start date as today and end date as 7 days from today
+
+> Now keyboard users should be able to do everything. Wow I can't believe this just worked first try :mind-blown:

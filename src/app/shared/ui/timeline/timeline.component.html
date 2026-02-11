@@ -80,6 +80,14 @@
             (mouseleave)="onMouseLeaveRow()"
             (click)="onRowClick(row.workCenter.docId)"
           >
+            <button
+              class="timeline_add-work-order-btn"
+              (click)="$event.stopPropagation(); onAddWorkOrder(row.workCenter.docId)"
+              [attr.aria-label]="'Add work order to ' + row.workCenter.data.name"
+            >
+              + Add work order
+            </button>
+
             @for (column of row.columns; track column.label) {
               <div class="timeline_row-column" [style.width]="columnWidth + 'px'"></div>
             }

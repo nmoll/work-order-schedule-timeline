@@ -258,6 +258,18 @@ export class TimelineComponent {
     this.rowHover.set(null);
   }
 
+  onAddWorkOrder(workCenterId: string) {
+    const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 7);
+
+    this.router.navigate(
+      [{ outlets: { 'side-panel': ['work-order-details', workCenterId, 'new'] } }],
+      { queryParams: { startDate: formatLocalDate(startDate), endDate: formatLocalDate(endDate) } },
+    );
+  }
+
   onRowClick(workCenterId: string) {
     const hover = this.rowHover();
     if (!hover?.addDates.visible) return;
