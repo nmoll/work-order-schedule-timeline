@@ -52,7 +52,7 @@
             {{ column.label }}
 
             @if (column.isCurrent) {
-              <span class="timeline_current-column-label">Current {{ zoomLevel() }}</span>
+              <span #currentColumn class="timeline_current-column-label">Current {{ zoomLevel() }}</span>
             }
           </div>
         }

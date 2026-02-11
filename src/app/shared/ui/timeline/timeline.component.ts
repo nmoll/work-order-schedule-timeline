@@ -1,4 +1,13 @@
-import { Component, computed, inject, Signal, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  Signal,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgLabelTemplateDirective, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
@@ -66,6 +75,8 @@ export class TimelineComponent {
   workCenterStore = inject(WorkCenterStore);
   workOrderStore = inject(WorkOrderStore);
 
+  currentColumn = viewChild<ElementRef>('currentColumn');
+
   columnWidth = 113;
   workOrderActions = WorkOrderActions;
 
@@ -76,6 +87,17 @@ export class TimelineComponent {
   ];
 
   zoomLevel = signal<'day' | 'week' | 'month'>('month');
+
+  constructor() {
+    effect(() => {
+      const el = this.currentColumn();
+      if (el) {
+        setTimeout(() => {
+          el.nativeElement.scrollIntoView({ inline: 'center', block: 'nearest' });
+        });
+      }
+    });
+  }
 
   rowHover = signal<RowHoverData | null>(null);
 
