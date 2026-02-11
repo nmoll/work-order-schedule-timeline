@@ -83,6 +83,7 @@ ng-select.zoom-select {
 
 .timeline_header {
   display: flex;
+  background-color: white;
   color: rgba(104, 113, 150, 1);
   font-size: 14px;
   font-weight: 500;
@@ -114,7 +115,7 @@ ng-select.zoom-select {
 
 .timeline_current-column-label {
   position: absolute;
-  top: 27px;
+  top: 30px;
   left: 0;
   background-color: rgba(212, 215, 255, 1);
   color: rgba(62, 64, 219, 1);
