@@ -84,3 +84,10 @@ Let's update the work order positioning logic to be not tied to a column, but re
 Can we remove the hover styling in the row in favor of using the row hover signal which will have an absolute positioned div that spans across the entire width/height of the row and has a smooth transition if it changes to a new row (the top/bottom position changes)
 
 > After a few more follow up prompts and ideas, I managed to get a nice smooth hover transition between rows. Nice!
+
+Ok I'm running voiceover and want a few things fixed for a11y:
+
+- The timescale dropdown needs to be labelled as "timescale select"
+- The row options button should be labelled as "<work order name> action menu"
+
+> Let's not forget screen reader users

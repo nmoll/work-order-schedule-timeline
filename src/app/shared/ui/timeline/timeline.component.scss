@@ -2,7 +2,6 @@
   --timeline-border-color: rgba(230, 235, 240, 1);
   --timeline-row-height: 48px;
   height: 100%;
-  overflow-y: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -71,7 +70,11 @@ ng-select.zoom-select {
   left: 0;
   right: 0;
   height: var(--timeline-row-height);
-  background: linear-gradient(to right, rgba(250, 251, 253, 1) 380px, rgba(238, 240, 255, 0.5) 380px);
+  background: linear-gradient(
+    to right,
+    rgba(250, 251, 253, 1) 380px,
+    rgba(238, 240, 255, 0.5) 380px
+  );
   pointer-events: none;
   z-index: 1;
   opacity: 0;
@@ -265,7 +268,8 @@ ng-select.zoom-select {
   background-color: rgba(241, 243, 248, 1);
 }
 
-.timeline_work-order:hover .timeline_work-order-options-btn {
+.timeline_work-order:hover .timeline_work-order-options-btn,
+.timeline_work-order .cdk-keyboard-focused .timeline_work-order-options-btn {
   visibility: visible;
 }
 

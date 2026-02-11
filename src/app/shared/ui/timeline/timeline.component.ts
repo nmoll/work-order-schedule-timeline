@@ -26,6 +26,7 @@ import {
 } from './timeline.utils';
 import { WorkOrderDocument } from '../../work-order/work-order';
 import { NgClass } from '@angular/common';
+import { A11yModule } from '@angular/cdk/a11y';
 import { WorkOrderStatusComponent } from '../work-order-status/work-order-status.component';
 
 interface TimelineViewModel {
@@ -66,6 +67,7 @@ interface RowHoverData {
     FormsModule,
     NgLabelTemplateDirective,
     WorkOrderStatusComponent,
+    A11yModule,
   ],
 })
 export class TimelineComponent {

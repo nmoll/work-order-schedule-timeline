@@ -52,6 +52,11 @@ h1 {
   border: 0;
 }
 
+.app-button:focus-visible {
+  outline: 2px solid rgba(170, 175, 255, 1);
+  outline-offset: 1px;
+}
+
 .app-button--primary {
   box-shadow:
     0 0 0 1px rgba(86, 89, 255, 1),
@@ -94,8 +99,8 @@ h1 {
   }
 
   .input:focus {
-    box-shadow: 0 0 0 2px rgba(170, 175, 255, 1);
-    outline: none;
+    outline: 2px solid rgba(170, 175, 255, 1);
+    outline-offset: 1px;
   }
 
   .error {

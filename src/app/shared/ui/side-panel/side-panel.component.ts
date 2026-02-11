@@ -1,9 +1,11 @@
-import { Component, HostListener, inject, input } from '@angular/core';
+import { Component, effect, HostListener, inject, input } from '@angular/core';
+import { A11yModule } from '@angular/cdk/a11y';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-side-panel',
   templateUrl: 'side-panel.component.html',
+  imports: [A11yModule],
   styles: `
     :host {
       display: contents;
@@ -68,8 +70,20 @@ import { Router } from '@angular/router';
 })
 export class SidePanelComponent {
   private router = inject(Router);
+  private previousFocus: HTMLElement | null = null;
 
   isOpen = input(false);
+
+  constructor() {
+    effect(() => {
+      if (this.isOpen()) {
+        this.previousFocus = document.activeElement as HTMLElement;
+      } else if (this.previousFocus) {
+        this.previousFocus.focus();
+        this.previousFocus = null;
+      }
+    });
+  }
 
   @HostListener('document:keydown.escape')
   onEscape() {

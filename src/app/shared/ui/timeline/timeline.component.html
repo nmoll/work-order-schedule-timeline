@@ -1,11 +1,13 @@
 <ng-select
   class="zoom-select"
+  cdkMonitorSubtreeFocus
   [items]="timescaleOptions"
   bindLabel="label"
   bindValue="value"
   [(ngModel)]="zoomLevel"
   [clearable]="false"
   [searchable]="false"
+  aria-label="Timescale select"
 >
   <ng-template ng-label-tmp let-item="item">
     <div class="timescale-selector">
@@ -97,9 +99,11 @@
                 <app-work-order-status [status]="workOrder.workOrder.data.status" />
                 <ng-select
                   #ngSelect
+                  cdkMonitorSubtreeFocus
                   [items]="workOrderActions"
                   [clearable]="false"
                   [searchable]="false"
+                  [attr.aria-label]="workOrder.workOrder.data.name + ' action menu'"
                   [ngModel]="''"
                   (change)="
                     onWorkOrderAction(

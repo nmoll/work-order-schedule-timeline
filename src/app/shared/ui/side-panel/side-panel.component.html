@@ -6,6 +6,6 @@
     (click)="close()"
   ></div>
 }
-<aside class="panel" [class.open]="isOpen()">
+<aside class="panel" [class.open]="isOpen()" cdkTrapFocus [cdkTrapFocusAutoCapture]="isOpen()">
   <ng-content />
 </aside>
