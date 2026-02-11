@@ -17,10 +17,9 @@ import {
   TimelineColumn,
 } from './timeline.utils';
 
-interface TimelineViewModel {
+export interface TimelineViewModel {
   rows: {
     workCenter: WorkCenterDocument;
-    columns: TimelineColumn[];
     workOrders: {
       workOrder: WorkOrderDocument;
       position: {
@@ -127,7 +126,6 @@ export class TimelineComponentStore {
   );
 
   readonly viewModel = computed<TimelineViewModel>(() => {
-    const columns = this.timelineColumns();
     const range = this.timelineRange();
     const totalWidth = this.totalTimelineWidth();
     const rangeStartTime = range.start.getTime();
@@ -139,7 +137,6 @@ export class TimelineComponentStore {
       rows: workCenters.map((workCenter) => {
         return {
           workCenter,
-          columns,
           workOrders: workOrders
             .filter((workOrder) => {
               if (workOrder.data.workCenterId !== workCenter.docId) {

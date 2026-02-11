@@ -90,10 +90,6 @@
               + Add work order
             </button>
 
-            @for (column of row.columns; track column.label) {
-              <div class="timeline_row-column" [style.width]="store.columnWidth + 'px'"></div>
-            }
-
             @for (workOrder of row.workOrders; track workOrder.workOrder.docId) {
               <div
                 class="timeline_work-order"
@@ -143,7 +139,6 @@
                 </ng-select>
               </div>
             }
-
           </div>
         }
 
