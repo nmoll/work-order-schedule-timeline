@@ -232,12 +232,16 @@ export class TimelineComponent {
   }
 
   onMouseMoveRow(workCenterId: string, event: MouseEvent) {
+    const target = event.target as HTMLElement;
     const row = event.currentTarget as HTMLElement;
     const positionX = event.clientX - row.getBoundingClientRect().left;
     const vmRow = this.viewModel().rows.find((r) => r.workCenter.docId === workCenterId);
-    const addDatesVisible = !vmRow?.workOrders.some((wo) => {
-      return positionX >= wo.position.left && positionX <= wo.position.left + wo.position.width;
-    });
+    const overDropdown = !!target.closest('.ng-dropdown-panel');
+    const addDatesVisible =
+      !overDropdown &&
+      !vmRow?.workOrders.some((wo) => {
+        return positionX >= wo.position.left && positionX <= wo.position.left + wo.position.width;
+      });
     this.rowHover.set({
       workCenterId,
       addDates: {

@@ -89,6 +89,7 @@
                 [style.left]="workOrder.position.left + 'px'"
                 [style.width]="workOrder.position.width + 'px'"
                 [style.z-index]="ngSelect.isOpen() ? 11 : 10"
+                (click)="$event.stopPropagation()"
               >
                 <span class="timeline_work-order-name">
                   {{ workOrder.workOrder.data.name }}
