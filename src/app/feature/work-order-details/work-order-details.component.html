@@ -55,6 +55,8 @@
           ngbDatepicker
           #startDatePicker="ngbDatepicker"
           (click)="startDatePicker.toggle()"
+          (focus)="startDatePicker.open()"
+          (dateSelect)="startDatePicker.close()"
           [container]="'body'"
           readonly
         />
@@ -81,6 +83,8 @@
           ngbDatepicker
           #endDatePicker="ngbDatepicker"
           (click)="endDatePicker.toggle()"
+          (focus)="endDatePicker.open()"
+          (dateSelect)="endDatePicker.close()"
           [container]="'body'"
           readonly
         />
