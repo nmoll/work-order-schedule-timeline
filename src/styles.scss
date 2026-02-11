@@ -1,10 +1,23 @@
 :root {
   --text-color-primary: rgba(62, 64, 219, 1);
-}
-
-html,
-body {
-  font-family: 'Circular-Std';
+  --text-color-dark: rgba(3, 9, 41, 1);
+  --text-color-heading: rgba(47, 48, 89, 1);
+  --text-color-secondary: rgba(104, 113, 150, 1);
+  --text-color-placeholder: rgba(164, 170, 192, 1);
+  --border-color: rgba(216, 220, 235, 1);
+  --border-color-light: rgba(230, 235, 240, 1);
+  --shadow-color: rgba(200, 207, 233, 1);
+  --focus-color: rgba(170, 175, 255, 1);
+  --input-bg: rgba(255, 255, 255, 1);
+  --status-in-progress-text: rgba(62, 64, 219, 1);
+  --status-in-progress-bg: rgba(214, 216, 255, 1);
+  --status-complete-text: rgba(8, 162, 104, 1);
+  --status-complete-bg: rgba(225, 255, 204, 1);
+  --status-blocked-text: rgba(177, 54, 0, 1);
+  --status-blocked-bg: rgba(252, 238, 181, 1);
+  --status-open-text: rgba(0, 176, 191, 1);
+  --status-open-border: rgba(206, 251, 255, 1);
+  --status-open-bg: rgba(228, 253, 255, 1);
 }
 
 /** Preflight **/
@@ -26,6 +39,7 @@ h6 {
 
 html,
 body {
+  font-family: 'Circular-Std';
   height: 100%;
   margin: 0;
 }
@@ -34,7 +48,7 @@ body {
 h1 {
   font-size: 1.5rem;
   font-weight: 500;
-  color: rgba(3, 9, 41, 1);
+  color: var(--text-color-dark);
 }
 
 /** Button **/
@@ -42,34 +56,33 @@ h1 {
   cursor: pointer;
   font-size: 15px;
   font-weight: 400;
-  color: rgba(47, 48, 89, 1);
+  color: var(--text-color-heading);
   padding: 6.5px 8px;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 1),
-    0 1px 3px 0 rgba(200, 207, 233, 1);
+    0 0 0 1px var(--input-bg),
+    0 1px 3px 0 var(--shadow-color);
   border-radius: 7px;
   background-color: white;
   border: 0;
-}
 
-.app-button:focus-visible {
-  outline: 2px solid rgba(170, 175, 255, 1);
-  outline-offset: 1px;
-}
+  &:focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: 1px;
+  }
 
-.app-button--primary {
-  box-shadow:
-    0 0 0 1px rgba(86, 89, 255, 1),
-    0 1px 3px 0 rgba(200, 207, 233, 1);
-  background-color: rgba(86, 89, 255, 1);
-  color: white;
-}
+  &--primary {
+    box-shadow:
+      0 0 0 1px rgba(86, 89, 255, 1),
+      0 1px 3px 0 var(--shadow-color);
+    background-color: rgba(86, 89, 255, 1);
+    color: white;
+  }
 
-.app-button--small {
-  font-size: 13px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  border-radius: 5px;
+  &--small {
+    font-size: 13px;
+    padding: 3px 8px;
+    border-radius: 5px;
+  }
 }
 
 /** Forms */
@@ -81,33 +94,33 @@ h1 {
   position: relative;
 
   .label {
-    color: rgba(104, 113, 150, 1);
+    color: var(--text-color-secondary);
     font-size: 14px;
     font-weight: 500;
   }
 
   .input {
     box-shadow:
-      0 0 0 1px rgba(216, 220, 235, 1),
-      0 1.5px 3px -1.5px rgba(200, 207, 233, 1),
-      0 1px 0.5px -1px rgba(216, 220, 235, 1);
+      0 0 0 1px var(--border-color),
+      0 1.5px 3px -1.5px var(--shadow-color),
+      0 1px 0.5px -1px var(--border-color);
     border-radius: 5px;
-    background-color: rgba(255, 255, 255, 1);
-    color: rgba(3, 9, 41, 1);
+    background-color: var(--input-bg);
+    color: var(--text-color-dark);
     font-size: 14px;
     font-weight: 500;
     line-height: 16px;
     padding: 11px 9px;
     border: none;
-  }
 
-  .input::placeholder {
-    color: rgba(164, 170, 192, 1);
-  }
+    &::placeholder {
+      color: var(--text-color-placeholder);
+    }
 
-  .input:focus {
-    outline: 2px solid rgba(170, 175, 255, 1);
-    outline-offset: 1px;
+    &:focus {
+      outline: 2px solid var(--focus-color);
+      outline-offset: 1px;
+    }
   }
 
   .error {

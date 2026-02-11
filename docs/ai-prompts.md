@@ -103,3 +103,7 @@ Let's create a shared directive for "infinite scroll anchor" which will detect w
 > Been a little while since I've used intersection observers
 
 Let's attach this to the second to last column column on each side of the timeline, and when the visible event is emitted, call the extendTimelineStart/extendTimelineEnd store methods
+
+Please search the scss code to find common colors which can be extracted into global css variables
+
+> Let's show some love to our design system.

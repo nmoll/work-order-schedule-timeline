@@ -6,23 +6,23 @@
 }
 
 .open {
-  color: rgba(0, 176, 191, 1);
-  border: 1px solid rgba(206, 251, 255, 1);
-  background-color: rgba(228, 253, 255, 1);
+  color: var(--status-open-text);
+  border: 1px solid var(--status-open-border);
+  background-color: var(--status-open-bg);
   font-weight: 500;
 }
 
 .in-progress {
-  color: rgba(62, 64, 219, 1);
-  background-color: rgba(214, 216, 255, 1);
+  color: var(--status-in-progress-text);
+  background-color: var(--status-in-progress-bg);
 }
 
 .complete {
-  color: rgba(8, 162, 104, 1);
-  background-color: rgba(225, 255, 204, 1);
+  color: var(--status-complete-text);
+  background-color: var(--status-complete-bg);
 }
 
 .blocked {
-  color: rgba(177, 54, 0, 1);
-  background-color: rgba(252, 238, 181, 1);
+  color: var(--status-blocked-text);
+  background-color: var(--status-blocked-bg);
 }
