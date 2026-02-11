@@ -81,6 +81,14 @@ ng-select.zoom-select {
   transition:
     top 0.2s ease,
     opacity 0.15s ease;
+
+  @media (max-width: 768px) {
+    background: linear-gradient(
+      to right,
+      rgba(250, 251, 253, 1) 160px,
+      rgba(238, 240, 255, 0.5) 160px
+    );
+  }
 }
 
 .timeline_row-highlight--visible {
@@ -92,6 +100,10 @@ ng-select.zoom-select {
   border-right: 1px solid var(--timeline-border-color);
   position: relative;
   z-index: 2;
+
+  @media (max-width: 768px) {
+    width: 160px;
+  }
 }
 
 .timeline_right-panel {
@@ -119,13 +131,19 @@ ng-select.zoom-select {
 .timeline_left-panel .timeline_header,
 .timeline_left-panel .timeline_left-panel-item {
   padding-left: 31px;
+
+  @media (max-width: 768px) {
+    padding-left: 16px;
+  }
 }
 
 .timeline_left-panel-item {
-  display: flex;
-  align-items: center;
   height: var(--timeline-row-height);
+  line-height: var(--timeline-row-height);
   border-bottom: 1px solid var(--timeline-border-color);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .timeline_month-column-header {
