@@ -1,10 +1,15 @@
 import { Injectable, signal } from '@angular/core';
-import { WORK_CENTERS } from './work-center-data';
 import { WorkCenterDocument } from './work-center';
+import { WORK_CENTERS } from './work-center-data';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WorkCenterStore {
-  workCenters = signal<WorkCenterDocument[]>(WORK_CENTERS);
+  workCenters = signal<WorkCenterDocument[]>([]);
+
+  /** @upgrade load data from backend */
+  load() {
+    this.workCenters.set(WORK_CENTERS);
+  }
 }

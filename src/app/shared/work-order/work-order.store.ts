@@ -1,13 +1,18 @@
 import { computed, Injectable, Signal, signal } from '@angular/core';
 import { WorkOrderData, WorkOrderDocument } from './work-order';
-import { WORK_ORDERS } from './work-order-data';
 import { parseLocalDate } from '../ui/timeline/timeline.utils';
+import { WORK_ORDERS } from './work-order-data';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WorkOrderStore {
-  workOrders = signal<WorkOrderDocument[]>(WORK_ORDERS);
+  workOrders = signal<WorkOrderDocument[]>([]);
+
+  /** @upgrade load data from backend */
+  load() {
+    this.workOrders.set(WORK_ORDERS);
+  }
 
   findById(id: string): Signal<WorkOrderDocument | undefined> {
     return computed(() => this.workOrders().find((workOrder) => workOrder.docId === id));

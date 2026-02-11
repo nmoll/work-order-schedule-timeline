@@ -18,6 +18,10 @@ import {
 } from './timeline.utils';
 
 export interface TimelineViewModel {
+  range: {
+    start: Date;
+    end: Date;
+  };
   rows: {
     workCenter: WorkCenterDocument;
     workOrders: {
@@ -134,6 +138,7 @@ export class TimelineComponentStore {
     const workOrders = this.workOrderStore.workOrders();
 
     return {
+      range,
       rows: workCenters.map((workCenter) => {
         return {
           workCenter,
