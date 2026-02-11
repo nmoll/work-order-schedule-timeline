@@ -64,7 +64,7 @@ export class WorkOrderDetailsComponent implements OnInit {
   formGroup = new FormGroup(
     {
       name: new FormControl('', [Validators.required]),
-      status: new FormControl<WorkOrderStatus>('blocked', [Validators.required]),
+      status: new FormControl<WorkOrderStatus>('open', [Validators.required]),
       startDate: new FormControl('', [Validators.required, this.dateOverlapValidator()]),
       endDate: new FormControl('', [Validators.required, this.dateOverlapValidator()]),
     },
