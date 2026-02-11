@@ -95,3 +95,5 @@ Ok I'm running voiceover and want a few things fixed for a11y:
 Ok the last thing I need to do for accessiblity is provide a way to add dates for a keyboard user. Can we have a hidden tabbable button inside each row in the timeline which is fixed to the left of the scrollable element (always visible) which when activated will show and hitting enter will open the work order details side panel with the start date as today and end date as 7 days from today
 
 > Now keyboard users should be able to do everything. Wow I can't believe this just worked first try :mind-blown:
+
+Please create a timeline.component.store.ts and move all appropriate state and methods into it so the component is simple as possible

@@ -1,10 +1,10 @@
 <ng-select
   class="zoom-select"
   cdkMonitorSubtreeFocus
-  [items]="timescaleOptions"
+  [items]="store.timescaleOptions"
   bindLabel="label"
   bindValue="value"
-  [(ngModel)]="zoomLevel"
+  [(ngModel)]="store.zoomLevel"
   [clearable]="false"
   [searchable]="false"
   aria-label="Timescale select"
@@ -37,26 +37,28 @@
 <div class="timeline">
   <div
     class="timeline_row-highlight"
-    [class.timeline_row-highlight--visible]="rowHover() !== null"
-    [style.top]="rowHighlightTop()"
+    [class.timeline_row-highlight--visible]="store.rowHover() !== null"
+    [style.top]="store.rowHighlightTop()"
   ></div>
   <div class="timeline_left-panel">
     <div class="timeline_header">Work Center</div>
-    @for (workCenter of workCenterStore.workCenters(); track workCenter.docId) {
+    @for (row of store.viewModel().rows; track row.workCenter.docId) {
       <div class="timeline_left-panel-item">
-        {{ workCenter.data.name }}
+        {{ row.workCenter.data.name }}
       </div>
     }
   </div>
   <div class="timeline_right-panel">
     <div class="timeline_right-panel-scroller">
       <div class="timeline_header">
-        @for (column of timelineColumns(); track column.label) {
-          <div class="timeline_month-column-header" [style.width]="columnWidth + 'px'">
+        @for (column of store.timelineColumns(); track column.label) {
+          <div class="timeline_month-column-header" [style.width]="store.columnWidth + 'px'">
             {{ column.label }}
 
             @if (column.isCurrent) {
-              <span #currentColumn class="timeline_current-column-label">Current {{ zoomLevel() }}</span>
+              <span #currentColumn class="timeline_current-column-label"
+                >Current {{ store.zoomLevel() }}</span
+              >
             }
           </div>
         }
@@ -64,32 +66,32 @@
 
       <div class="timeline_body">
         <div class="timeline_columns">
-          @for (column of timelineColumns(); track column.colNumber) {
+          @for (column of store.timelineColumns(); track column.colNumber) {
             <div
               class="timeline_column"
               [class.current]="column.isCurrent"
-              [style.width]="columnWidth + 'px'"
+              [style.width]="store.columnWidth + 'px'"
             ></div>
           }
         </div>
 
-        @for (row of viewModel().rows; track row.workCenter.docId) {
+        @for (row of store.viewModel().rows; track row.workCenter.docId) {
           <div
             class="timeline_row"
-            (mousemove)="onMouseMoveRow(row.workCenter.docId, $event)"
-            (mouseleave)="onMouseLeaveRow()"
-            (click)="onRowClick(row.workCenter.docId)"
+            (mousemove)="store.onMouseMoveRow(row.workCenter.docId, $event)"
+            (mouseleave)="store.onMouseLeaveRow()"
+            (click)="store.onRowClick(row.workCenter.docId)"
           >
             <button
               class="timeline_add-work-order-btn"
-              (click)="$event.stopPropagation(); onAddWorkOrder(row.workCenter.docId)"
+              (click)="$event.stopPropagation(); store.onAddWorkOrder(row.workCenter.docId)"
               [attr.aria-label]="'Add work order to ' + row.workCenter.data.name"
             >
               + Add work order
             </button>
 
             @for (column of row.columns; track column.label) {
-              <div class="timeline_row-column" [style.width]="columnWidth + 'px'"></div>
+              <div class="timeline_row-column" [style.width]="store.columnWidth + 'px'"></div>
             }
 
             @for (workOrder of row.workOrders; track workOrder.workOrder.docId) {
@@ -108,13 +110,13 @@
                 <ng-select
                   #ngSelect
                   cdkMonitorSubtreeFocus
-                  [items]="workOrderActions"
+                  [items]="store.workOrderActions"
                   [clearable]="false"
                   [searchable]="false"
                   [attr.aria-label]="workOrder.workOrder.data.name + ' action menu'"
                   [ngModel]="''"
                   (change)="
-                    onWorkOrderAction(
+                    store.onWorkOrderAction(
                       $event,
                       row.workCenter.docId,
                       workOrder.workOrder.docId,
@@ -147,12 +149,12 @@
 
         <div
           class="timeline_add-dates-button"
-          [class.timeline_add-dates-button--visible]="rowHover()?.addDates?.visible"
-          [style.top]="addDatesTop()"
-          [style.left]="addDatesPosition().left + 'px'"
-          [style.width]="addDatesPosition().width + 'px'"
+          [class.timeline_add-dates-button--visible]="store.rowHover()?.addDates?.visible"
+          [style.top]="store.addDatesTop()"
+          [style.left]="store.addDatesPosition().left + 'px'"
+          [style.width]="store.addDatesPosition().width + 'px'"
         >
-          @if (rowHover()?.addDates?.visible) {
+          @if (store.rowHover()?.addDates?.visible) {
             <div class="timeline_add-dates-button_tooltip">Click to add dates</div>
           }
         </div>
