@@ -13,6 +13,7 @@ import {
   getWeekRange,
   getMonthRange,
   parseLocalDate,
+  formatLocalDate,
 } from './timeline.utils';
 import { WorkOrderDocument } from '../../work-order/work-order';
 import { NgClass } from '@angular/common';
@@ -36,6 +37,17 @@ interface TimelineViewModel {
 
 const WorkOrderActions = ['Edit', 'Delete'] as const;
 type WorkOrderAction = (typeof WorkOrderActions)[number];
+
+interface AddDatesData {
+  left: number;
+  right: number;
+  visible: boolean;
+}
+
+interface RowHoverData {
+  workCenterId: string;
+  addDates: AddDatesData;
+}
 
 @Component({
   selector: 'app-timeline',
@@ -65,7 +77,7 @@ export class TimelineComponent {
 
   zoomLevel = signal<'day' | 'week' | 'month'>('month');
 
-  rowHoverId = signal<string | null>(null);
+  rowHover = signal<RowHoverData | null>(null);
 
   timelineColumns: Signal<TimelineColumn[]> = computed(() => {
     const today = new Date();
@@ -146,5 +158,55 @@ export class TimelineComponent {
         this.workOrderStore.deleteWorkOrder(workOrderId);
         break;
     }
+  }
+
+  onMouseMoveRow(workCenterId: string, event: MouseEvent) {
+    const row = event.currentTarget as HTMLElement;
+    const positionX = event.clientX - row.getBoundingClientRect().left;
+    const vmRow = this.viewModel().rows.find((r) => r.workCenter.docId === workCenterId);
+    const addDatesVisible = !vmRow?.columns.some((col, colIndex) =>
+      col.workOrders.some((wo) => {
+        const woLeft = colIndex * this.columnWidth + wo.position.left;
+        return positionX >= woLeft && positionX <= woLeft + wo.position.width;
+      }),
+    );
+    this.rowHover.set({
+      workCenterId,
+      addDates: {
+        left: positionX - this.columnWidth / 2,
+        right: positionX + this.columnWidth / 2,
+        visible: addDatesVisible ?? true,
+      },
+    });
+  }
+
+  onMouseLeaveRow() {
+    this.rowHover.set(null);
+  }
+
+  onRowClick(workCenterId: string) {
+    const hover = this.rowHover();
+    if (!hover?.addDates.visible) return;
+
+    const positionX = (hover.addDates.left + hover.addDates.right) / 2;
+    const columns = this.timelineColumns();
+    const colIndex = Math.floor(positionX / this.columnWidth);
+    const column = columns[colIndex];
+    if (!column) return;
+
+    const fraction = (positionX - colIndex * this.columnWidth) / this.columnWidth;
+    const colStartTime = column.start.getTime();
+    const colEndTime = column.end.getTime();
+    const clickedTime = colStartTime + fraction * (colEndTime - colStartTime);
+
+    const startDate = new Date(clickedTime);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 7);
+
+    this.router.navigate(
+      [{ outlets: { 'side-panel': ['work-order-details', workCenterId, 'new'] } }],
+      { queryParams: { startDate: formatLocalDate(startDate), endDate: formatLocalDate(endDate) } },
+    );
   }
 }

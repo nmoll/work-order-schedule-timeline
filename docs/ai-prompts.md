@@ -66,3 +66,13 @@ Add validation rule where end date cannot be before start date
 Add a new path parameter for workCenterId in the work order detail route
 
 Add another validator to both start and end dates: the date must not be contained within any work order for the same work center id. You can add a new method in the work order store that finds a work order by date
+
+Look at my implementation of the row hover. I want the add-dates-button to appear in the row at the same x position as the cursor, but constrained vertically to the row. It seems that the "x" property in the event is not what I need. What am I missing?
+
+> Nice, it was able to quickly identify the issue
+
+Add a "addDatesVisible" to the row hover object and set it to false if the user is hovering over a work order
+
+> Feels like cheating sometimes
+
+when the add dates button is clicked, calculate the date based on the clicked position on the timeline and navigate to the work order detail with this start date, and with an end date +7 days from this

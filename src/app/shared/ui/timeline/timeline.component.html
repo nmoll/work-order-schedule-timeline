@@ -38,7 +38,7 @@
     @for (workCenter of workCenterStore.workCenters(); track workCenter.docId) {
       <div
         class="timeline_left-panel-item"
-        [class.timeline_left-panel-item--hover]="rowHoverId() === workCenter.docId"
+        [class.timeline_left-panel-item--hover]="rowHover()?.workCenterId === workCenter.docId"
       >
         {{ workCenter.data.name }}
       </div>
@@ -72,8 +72,9 @@
         @for (row of viewModel().rows; track row.workCenter.docId) {
           <div
             class="timeline_row"
-            (mouseenter)="rowHoverId.set(row.workCenter.docId)"
-            (mouseleave)="rowHoverId.set(null)"
+            (mousemove)="onMouseMoveRow(row.workCenter.docId, $event)"
+            (mouseleave)="onMouseLeaveRow()"
+            (click)="onRowClick(row.workCenter.docId)"
           >
             @for (column of row.columns; track column.column.label) {
               <div class="timeline_row-column" [style.width]="columnWidth + 'px'">
@@ -124,6 +125,18 @@
                   </div>
                 }
               </div>
+            }
+
+            @if (rowHover(); as hover) {
+              @if (hover.workCenterId === row.workCenter.docId && hover.addDates.visible) {
+                <div
+                  class="timeline_add-dates-button"
+                  [style.left]="hover.addDates.left + 'px'"
+                  [style.width]="hover.addDates.right - hover.addDates.left + 'px'"
+                >
+                  <div class="timeline_add-dates-button_tooltip">Click to add dates</div>
+                </div>
+              }
             }
           </div>
         }

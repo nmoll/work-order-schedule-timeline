@@ -12,104 +12,92 @@
     </div>
   </header>
   <section class="content">
-    @if (workOrder(); as order) {
-      <div class="inputs">
-        <div class="form-field">
-          <label for="name" class="label">Work Order Name</label>
-          <input id="name" class="input" placeholder="Acme Inc." formControlName="name" />
-          @if (formGroup.controls.name.touched && formGroup.controls.name.hasError('required')) {
-            <span class="error">Work order name is required</span>
-          }
-        </div>
-
-        <div class="form-field">
-          <label for="status" class="label">Status</label>
-          <ng-select
-            [items]="statusOptions"
-            [clearable]="false"
-            [searchable]="false"
-            id="status"
-            class="ng-select-input"
-            formControlName="status"
-          >
-            <ng-template ng-option-tmp let-item="item"
-              >{{ item | appWorkOrderStatusDisplay }}
-            </ng-template>
-            <ng-template ng-label-tmp let-item="item">
-              @if (item) {
-                <app-work-order-status [status]="item" />
-              }
-            </ng-template>
-          </ng-select>
-          @if (
-            formGroup.controls.status.touched && formGroup.controls.status.hasError('required')
-          ) {
-            <span class="error">Status is required</span>
-          }
-        </div>
-
-        <div class="form-field">
-          <label for="startDate" class="label">Start date</label>
-          <input
-            id="startDate"
-            class="input"
-            placeholder="01.01.2026"
-            formControlName="startDate"
-            ngbDatepicker
-            #startDatePicker="ngbDatepicker"
-            (click)="startDatePicker.toggle()"
-            [container]="'body'"
-            readonly
-          />
-          @if (
-            formGroup.controls.startDate.touched &&
-            formGroup.controls.startDate.hasError('required')
-          ) {
-            <span class="error">Start date is required</span>
-          } @else if (
-            formGroup.controls.startDate.touched &&
-            formGroup.controls.startDate.hasError('dateOverlap')
-          ) {
-            <span class="error">
-              Date overlaps with "{{
-                formGroup.controls.startDate.getError('dateOverlap').workOrderName
-              }}"
-            </span>
-          }
-        </div>
-
-        <div class="form-field">
-          <label for="endDate" class="label">End date</label>
-          <input
-            id="endDate"
-            class="input"
-            placeholder="02.01.2026"
-            formControlName="endDate"
-            ngbDatepicker
-            #endDatePicker="ngbDatepicker"
-            (click)="endDatePicker.toggle()"
-            [container]="'body'"
-            readonly
-          />
-          @if (
-            formGroup.controls.endDate.touched && formGroup.controls.endDate.hasError('required')
-          ) {
-            <span class="error">End date is required</span>
-          } @else if (
-            formGroup.controls.endDate.touched && formGroup.controls.endDate.hasError('dateOverlap')
-          ) {
-            <span class="error">
-              Date overlaps with "{{
-                formGroup.controls.endDate.getError('dateOverlap').workOrderName
-              }}"
-            </span>
-          } @else if (formGroup.controls.endDate.touched && formGroup.hasError('dateRange')) {
-            <span class="error">End date must be after start date</span>
-          }
-        </div>
+    <div class="inputs">
+      <div class="form-field">
+        <label for="name" class="label">Work Order Name</label>
+        <input id="name" class="input" placeholder="Acme Inc." formControlName="name" />
+        @if (formGroup.controls.name.touched && formGroup.controls.name.hasError('required')) {
+          <span class="error">Work order name is required</span>
+        }
       </div>
-    } @else {
-      <p>Work order not found.</p>
-    }
+
+      <div class="form-field">
+        <label for="status" class="label">Status</label>
+        <ng-select
+          [items]="statusOptions"
+          [clearable]="false"
+          [searchable]="false"
+          id="status"
+          class="ng-select-input"
+          formControlName="status"
+        >
+          <ng-template ng-option-tmp let-item="item"
+            >{{ item | appWorkOrderStatusDisplay }}
+          </ng-template>
+          <ng-template ng-label-tmp let-item="item">
+            @if (item) {
+              <app-work-order-status [status]="item" />
+            }
+          </ng-template>
+        </ng-select>
+        @if (formGroup.controls.status.touched && formGroup.controls.status.hasError('required')) {
+          <span class="error">Status is required</span>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="startDate" class="label">Start date</label>
+        <input
+          id="startDate"
+          class="input"
+          placeholder="01.01.2026"
+          formControlName="startDate"
+          ngbDatepicker
+          #startDatePicker="ngbDatepicker"
+          (click)="startDatePicker.toggle()"
+          [container]="'body'"
+          readonly
+        />
+        @if (
+          formGroup.controls.startDate.touched && formGroup.controls.startDate.hasError('required')
+        ) {
+          <span class="error">Start date is required</span>
+        } @else if (formGroup.controls.startDate.hasError('dateOverlap')) {
+          <span class="error">
+            Date overlaps with "{{
+              formGroup.controls.startDate.getError('dateOverlap').workOrderName
+            }}"
+          </span>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="endDate" class="label">End date</label>
+        <input
+          id="endDate"
+          class="input"
+          placeholder="02.01.2026"
+          formControlName="endDate"
+          ngbDatepicker
+          #endDatePicker="ngbDatepicker"
+          (click)="endDatePicker.toggle()"
+          [container]="'body'"
+          readonly
+        />
+        @if (
+          formGroup.controls.endDate.touched && formGroup.controls.endDate.hasError('required')
+        ) {
+          <span class="error">End date is required</span>
+        } @else if (formGroup.controls.endDate.hasError('dateOverlap')) {
+          <span class="error">
+            Date overlaps with "{{
+              formGroup.controls.endDate.getError('dateOverlap').workOrderName
+            }}"
+          </span>
+        } @else if (formGroup.controls.endDate.touched && formGroup.hasError('dateRange')) {
+          <span class="error">End date must be after start date</span>
+        }
+      </div>
+    </div>
   </section>
 </form>

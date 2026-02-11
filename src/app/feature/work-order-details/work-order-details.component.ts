@@ -55,6 +55,8 @@ export class WorkOrderDetailsComponent implements OnInit {
 
   workCenterId = input.required<string>();
   id = input.required<string>();
+  startDate = input<string>();
+  endDate = input<string>();
   workOrder = computed(() => this.workOrderStore.findById(this.id())());
 
   isEditing = computed(() => !!this.workOrder());
@@ -103,6 +105,15 @@ export class WorkOrderDetailsComponent implements OnInit {
         startDate: workOrder.data.startDate,
         endDate: workOrder.data.endDate,
       });
+    } else {
+      const startDate = this.startDate();
+      const endDate = this.endDate();
+      if (startDate) {
+        this.formGroup.patchValue({ startDate });
+      }
+      if (endDate) {
+        this.formGroup.patchValue({ endDate });
+      }
     }
   }
 
