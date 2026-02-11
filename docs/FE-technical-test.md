@@ -1,28 +1,5 @@
 # Work Order Schedule Timeline - Frontend Technical Test
 
-## Completion Checklist
-
-- [ ] Responsive behavior (doesn't break on smaller screens)
-- [ ] README with setup instructions, approach description, libraries used
-- [ ] Loom demo video (5-10 min)
-
-### Bonus (Optional)
-
-- [ ] localStorage persistence
-- [ ] Keyboard navigation (Tab through form, Escape to close)
-- [ ] Infinite horizontal scroll (prepend/append date columns dynamically)
-- [ ] "Today" button to jump viewport to current date
-- [ ] Tooltip on bar hover (name, status, full date range)
-- [ ] Unit tests (Jest or Karma)
-- [ ] E2E tests (Cypress or Playwright)
-- [ ] Custom datepicker styling to match design system
-- [ ] Accessibility (ARIA labels, focus management)
-- [ ] AI prompts saved in markdown files
-- [ ] Trade-offs documented
-- [ ] `@upgrade` comments for future improvements
-
----
-
 ## Overview
 
 You are tasked with building a Work Order Schedule Timeline component for a manufacturing ERP system. This interactive timeline allows users to visualize, create, and edit work orders across multiple work centers.
