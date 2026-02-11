@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, HostListener, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -70,6 +70,13 @@ export class SidePanelComponent {
   private router = inject(Router);
 
   isOpen = input(false);
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    if (this.isOpen()) {
+      this.close();
+    }
+  }
 
   close() {
     this.router.navigate([{ outlets: { 'side-panel': null } }]);
