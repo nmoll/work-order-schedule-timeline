@@ -10,6 +10,7 @@ import { WorkOrderStore } from '../../work-order/work-order.store';
 import { InfiniteScrollAnchorDirective } from '../infinite-scroll-anchor/infinite-scroll-anchor.directive';
 import { Button } from '../button/button.directive';
 
+/** @upgrade the refactor stores out in favor of inputs/outputs to make this a dumb component */
 @Component({
   selector: 'app-timeline',
   templateUrl: 'timeline.component.html',

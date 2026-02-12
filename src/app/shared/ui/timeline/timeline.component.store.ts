@@ -48,6 +48,16 @@ interface RowHoverData {
   addDates: AddDatesData;
 }
 
+/**
+ * @upgrade
+ * Could use a state management library instead.
+ * This class seems more complicated than it should be. Perhaps the following refactors would help:
+ * - Use the strategy pattern to abstract zoom level specific logic into their own classes
+ * - Move constants elsewhere
+ * - Move routing things into the component
+ * - Use directives to handle logic tied to the DOM
+ * - Extract some logic into utility functions
+ * */
 @Injectable()
 export class TimelineComponentStore {
   private readonly router = inject(Router);
