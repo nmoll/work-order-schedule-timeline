@@ -1,0 +1,175 @@
+<div class="timeline">
+  <div
+    class="timeline_row-highlight"
+    [class.timeline_row-highlight--visible]="isRowHighlighted()"
+    [style.top.px]="getRowHighlightTopPx()"
+  ></div>
+
+  <div class="timeline_left-panel">
+    <div class="timeline_header timeline_header--left">Work Center</div>
+    @for (row of rows(); track row.workCenter.docId) {
+      <div class="timeline_left-panel-item">
+        {{ row.workCenter.data.name }}
+      </div>
+    }
+  </div>
+
+  <div #rightPanel class="timeline_right-panel">
+    <div class="timeline_scroller">
+      <div class="timeline_header">
+        @for (column of columns(); track column.index) {
+          <div class="timeline_header-cell" [style.width.px]="columnWidthPx()">
+            {{ column.label }}
+            @if (column.isCurrent) {
+              <span #currentColumn class="timeline_current-marker">Current {{ scale() }}</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="timeline_body">
+        <div class="timeline_columns">
+          @for (
+            column of columns();
+            track column.index;
+            let index = $index;
+            let count = $count
+          ) {
+            @if (index === 1) {
+              <div
+                appInfiniteScrollAnchor
+                class="timeline_column"
+                [class.current]="column.isCurrent"
+                [style.width.px]="columnWidthPx()"
+                (infiniteScrollAnchorVisible)="onExtendTimelineStart()"
+              ></div>
+            } @else if (index === count - 2) {
+              <div
+                appInfiniteScrollAnchor
+                class="timeline_column"
+                [class.current]="column.isCurrent"
+                [style.width.px]="columnWidthPx()"
+                (infiniteScrollAnchorVisible)="onExtendTimelineEnd()"
+              ></div>
+            } @else {
+              <div
+                class="timeline_column"
+                [class.current]="column.isCurrent"
+                [style.width.px]="columnWidthPx()"
+              ></div>
+            }
+          }
+        </div>
+
+        @for (row of rows(); track row.workCenter.docId) {
+          <div
+            class="timeline_row"
+            (mousemove)="onRowMouseMove(row.workCenter.docId, $event)"
+            (mouseleave)="onRowMouseLeave()"
+            (click)="onRowClick(row.workCenter.docId)"
+          >
+            <button
+              class="timeline_add-work-order-btn"
+              type="button"
+              (click)="onAddButtonClick(row.workCenter.docId, $event)"
+              [attr.aria-label]="'Add work order to ' + row.workCenter.data.name"
+            >
+              + Add work order
+            </button>
+
+            @for (workOrder of row.workOrders; track workOrder.workOrder.docId) {
+              <div
+                class="timeline_work-order"
+                [ngClass]="workOrder.workOrder.data.status"
+                [style.left.px]="toPx(workOrder.startUnit)"
+                [style.width.px]="widthPx(workOrder.startUnit, workOrder.endUnit)"
+                [style.z-index]="getWorkOrderZIndex(workOrder.workOrder.docId)"
+                (click)="onWorkOrderClick($event)"
+              >
+                <span class="timeline_work-order-name">{{ workOrder.workOrder.data.name }}</span>
+                <app-work-order-status [status]="workOrder.workOrder.data.status" />
+
+                <div class="timeline_work-order-actions" data-timeline-menu="true">
+                  <button
+                    class="timeline_work-order-options-btn"
+                    [class.timeline_work-order-options-btn--active]="
+                      isWorkOrderMenuOpen(workOrder.workOrder.docId)
+                    "
+                    type="button"
+                    data-timeline-menu="true"
+                    (click)="
+                      toggleWorkOrderMenu(workOrder.workOrder.docId, $event)
+                    "
+                    [attr.aria-label]="'Open actions for ' + workOrder.workOrder.data.name"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"
+                      />
+                    </svg>
+                  </button>
+
+                  @if (isWorkOrderMenuOpen(workOrder.workOrder.docId)) {
+                    <div
+                      class="timeline_work-order-menu"
+                      data-timeline-menu="true"
+                      [attr.data-work-order-menu-id]="workOrder.workOrder.docId"
+                    >
+                      <button
+                        type="button"
+                        data-timeline-menu="true"
+                        (click)="
+                          onWorkOrderMenuAction(
+                            'edit',
+                            row.workCenter.docId,
+                            workOrder.workOrder.docId,
+                            $event
+                          )
+                        "
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        data-timeline-menu="true"
+                        (click)="
+                          onWorkOrderMenuAction(
+                            'delete',
+                            row.workCenter.docId,
+                            workOrder.workOrder.docId,
+                            $event
+                          )
+                        "
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (getRowOverlay(row.workCenter.docId); as overlay) {
+              <div
+                class="timeline_hover-overlay"
+                [class.timeline_hover-overlay--active]="overlay.canCreate"
+                [style.left.px]="toPx(overlay.startUnit)"
+                [style.width.px]="toPx(overlay.spanUnits)"
+              >
+                @if (overlay.canCreate) {
+                  <span class="timeline_hover-overlay-tooltip">Click to add dates</span>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

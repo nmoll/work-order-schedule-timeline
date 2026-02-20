@@ -1,0 +1,34 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+app-timeline-grid {
+  margin-top: 24px;
+  flex: 1;
+  min-height: 0;
+}
+
+.timeline_loading,
+.timeline_empty,
+.timeline_error {
+  margin-top: 16px;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.timeline_loading,
+.timeline_empty {
+  color: var(--text-color-secondary);
+  background-color: rgba(247, 249, 252, 1);
+  border: 1px solid var(--border-color-light);
+}
+
+.timeline_error {
+  color: oklch(63.7% 0.237 25.331);
+  background-color: rgb(254 242 242);
+  border: 1px solid rgb(252 165 165);
+}

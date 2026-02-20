@@ -2,9 +2,23 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .page-title {
   margin-top: 45px;
   margin-bottom: 26px;
+}
+
+.implementation-toggle {
+  position: fixed;
+  top: 18px;
+  right: 24px;
+  z-index: 40;
+}
+
+app-timeline,
+app-timeline-v2-container {
+  flex: 1;
+  min-height: 0;
 }

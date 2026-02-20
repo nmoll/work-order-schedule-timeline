@@ -1,3 +1,11 @@
 <h1 class="page-title">Work Orders</h1>
 
-<app-timeline />
+<button app-button size="small" class="implementation-toggle" (click)="toggleImplementation()">
+  Switch to {{ implementation() === 'v1' ? 'V2' : 'V1' }}
+</button>
+
+@if (implementation() === 'v1') {
+  <app-timeline />
+} @else {
+  <app-timeline-v2-container />
+}

@@ -1,0 +1,26 @@
+<app-timeline-toolbar
+  [scale]="facade.scale()"
+  [scaleOptions]="facade.scaleOptions"
+  (scaleChange)="onScaleChange($event)"
+  (todayClick)="onTodayClick()"
+/>
+
+@if (facade.error(); as error) {
+  <div class="timeline_error">{{ error }}</div>
+}
+
+<app-timeline-grid
+  [columns]="facade.columns()"
+  [rows]="facade.rows()"
+  [scale]="facade.scale()"
+  [columnWidthPx]="facade.columnWidthPx"
+  [hoverOverlay]="facade.hoverOverlay()"
+  [hoveredWorkCenterId]="facade.hover().workCenterId"
+  (extendStart)="onExtendStart()"
+  (extendEnd)="onExtendEnd()"
+  (rowPointerMove)="onRowPointerMove($event)"
+  (rowPointerLeave)="onRowPointerLeave()"
+  (createFromRow)="onCreateFromRow($event)"
+  (createFromButton)="onCreateFromButton($event)"
+  (workOrderAction)="onWorkOrderAction($event)"
+/>
